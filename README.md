@@ -39,9 +39,9 @@ formie (dzień urodzin/imienin, ilość dni do zbliżającej się rocznicy, data
 
 ### Schemat bazy danych:
 <p align="center">
-1. Dwuwymiarowy Dywan Sierpińskiego w początkowym statycznym położeniu
+Schemat bazy danych wygenerowany przy użyciu MySQL Workbench.
 </p>
 <p align="center">
-<img height="580" width="650" src="https://image.ibb.co/e9UtW6/1.png" />
+<img height="538" width="738" src="https://image.ibb.co/g6J3nn/dbss.png" />
 </p>
 <p align="center">
