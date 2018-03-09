@@ -13,3 +13,9 @@
     -fx-border-image-repeat: no-repeat;
     -fx-background-size: contain;
 }
+
+.registrationProposalVBoxTheme {
+    -fx-background-image: url("../image/registration_proposal_vbox_theme.jpg");
+    -fx-border-image-repeat: no-repeat;
+    -fx-background-size: cover;
+}

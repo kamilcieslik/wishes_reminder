@@ -17,14 +17,14 @@
         <VBox.margin>
             <Insets />
         </VBox.margin>
-        <ImageView fitHeight="144.0" fitWidth="454.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 5, 0, 4, 6);">
+        <ImageView fitHeight="144.0" fitWidth="454.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.75, 0, 0);">
             <HBox.margin>
                 <Insets />
             </HBox.margin>
             <Image url="@../image/logo.png" />
         </ImageView>
     </HBox>
-   <Label alignment="CENTER" prefHeight="30.0" prefWidth="918.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 5, 0, 4, 6);" text="PROGRAM PRZYPOMINAJĄCY O WYSYŁANIU ŻYCZEŃ DO TWOICH BLISKICH" textFill="WHITE">
+   <Label alignment="CENTER" prefHeight="30.0" prefWidth="918.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.75, 0, 0);" text="PROGRAM PRZYPOMINAJĄCY O WYSYŁANIU ŻYCZEŃ DO TWOICH BLISKICH" textFill="WHITE">
       <font>
          <Font name="System Bold" size="13.0" />
       </font>
@@ -43,7 +43,7 @@
       </ProgressBar>
    </HBox>
    <HBox alignment="BOTTOM_CENTER" prefHeight="40.0" prefWidth="815.0">
-      <ImageView fitHeight="83.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 5, 0, 4, 6);">
+      <ImageView fitHeight="83.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.75, 0, 0);">
          <HBox.margin>
             <Insets bottom="10.0" left="10.0" />
          </HBox.margin>
@@ -59,7 +59,7 @@
                <Font size="13.0" />
             </font>
          </Label>
-         <Label alignment="CENTER_RIGHT" prefHeight="19.0" prefWidth="424.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 5, 0, 4, 6);" text="Kamil Cieślik, Kamil Sikora, Arkadiusz Sokołowski, Patryk Zdral">
+         <Label alignment="CENTER_RIGHT" prefHeight="19.0" prefWidth="424.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0.75, 0, 0);" text="Kamil Cieślik, Kamil Sikora, Arkadiusz Sokołowski, Patryk Zdral">
             <font>
                <Font size="13.0" />
             </font>

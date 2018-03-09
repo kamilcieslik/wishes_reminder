@@ -50,19 +50,17 @@ public class WelcomeBannerController implements Initializable {
             public void run() {
                 FXMLLoader loader = new FXMLLoader();
                 try {
-                    loader.setLocation(getClass().getClassLoader().getResource("fxml/main.fxml"));
+                    loader.setLocation(getClass().getClassLoader().getResource("fxml/login.fxml"));
                     loader.load();
                     Parent parent = loader.getRoot();
                     Stage primaryStage = new Stage();
                     Main.setMainStage(primaryStage);
                     primaryStage.initStyle(StageStyle.DECORATED);
-                    primaryStage.resizableProperty().setValue(Boolean.TRUE);
+                    primaryStage.resizableProperty().setValue(Boolean.FALSE);
                     primaryStage.setOnHidden(event -> Platform.exit());
                     primaryStage.setTitle("Wishes Reminder");
                     primaryStage.getIcons().add(new Image("/image/icon.png"));
-                    primaryStage.setMinWidth(970);
-                    primaryStage.setMinHeight(930);
-                    primaryStage.setScene(new Scene(parent, 1600, 900));
+                    primaryStage.setScene(new Scene(parent, 1185, 585));
 
                     Stage stage = (Stage) progressBarAppLoading.getScene().getWindow();
                     stage.hide();
