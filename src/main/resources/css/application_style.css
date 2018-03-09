@@ -19,3 +19,7 @@
     -fx-border-image-repeat: no-repeat;
     -fx-background-size: cover;
 }
+
+.textAreaSelectedAlreadySentWishText .text {
+    -fx-text-alignment: center;
+}
