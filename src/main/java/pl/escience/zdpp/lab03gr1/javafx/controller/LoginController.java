@@ -19,13 +19,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LoginController implements Initializable {
-
     @FXML
     private TextField textFieldLogin;
-
     @FXML
     private PasswordField passwordFieldPassword;
-
     @FXML
     private Label labelInvalidLoginOrPassword;
 
