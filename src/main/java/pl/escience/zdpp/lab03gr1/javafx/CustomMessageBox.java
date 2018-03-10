@@ -23,7 +23,8 @@ public class CustomMessageBox {
         return alert;
     }
 
-    public Alert showConfirmMessageBox(Alert.AlertType alertType, String title, String header, String content, String confirmText, String cancelText) {
+    public Alert showConfirmMessageBox(Alert.AlertType alertType, String title, String header, String content,
+                                       String confirmText, String cancelText) {
         ButtonType confirmButton = new ButtonType(confirmText, ButtonBar.ButtonData.OK_DONE);
         ButtonType cancelButton = new ButtonType(cancelText, ButtonBar.ButtonData.CANCEL_CLOSE);
         Alert alert = new Alert(alertType, content, confirmButton, cancelButton);

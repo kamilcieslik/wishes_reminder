@@ -32,18 +32,18 @@ public class Main extends Application {
             loader.setLocation(getClass().getClassLoader().getResource("fxml/welcome_banner.fxml"));
             loader.load();
             Parent root = loader.getRoot();
-            primaryStage.setTitle("Wishes Reminder");
-            primaryStage.getIcons().add(new Image("/image/icon.png"));
-            primaryStage.initStyle(StageStyle.UNDECORATED);
-            primaryStage.resizableProperty().setValue(Boolean.FALSE);
-            primaryStage.setScene(new Scene(root, 819, 325));
+            mainStage.setTitle("Wishes Reminder");
+            mainStage.getIcons().add(new Image("/image/icon.png"));
+            mainStage.initStyle(StageStyle.UNDECORATED);
+            mainStage.resizableProperty().setValue(Boolean.FALSE);
+            mainStage.setScene(new Scene(root, 819, 325));
             WelcomeBannerController loaderController = loader.getController();
-            primaryStage.addEventHandler(WindowEvent.WINDOW_SHOWN, window -> {
+            mainStage.addEventHandler(WindowEvent.WINDOW_SHOWN, window -> {
                 Thread windowShownListener = new Thread(loaderController::initMainScene);
                 windowShownListener.start();
             });
-            primaryStage.centerOnScreen();
-            primaryStage.show();
+            mainStage.centerOnScreen();
+            mainStage.show();
         } catch (IOException ioEcx) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ioEcx);
         }

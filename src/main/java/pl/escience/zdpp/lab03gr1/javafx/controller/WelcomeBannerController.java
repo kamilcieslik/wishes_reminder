@@ -19,7 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class WelcomeBannerController implements Initializable {
-    private static final int PROGRESS_BAR_SECONDS = 2;
+    private static final int PROGRESS_BAR_SECONDS = 1;
     @FXML
     private ProgressBar progressBarAppLoading;
 
@@ -57,7 +57,6 @@ public class WelcomeBannerController implements Initializable {
                     Main.setMainStage(primaryStage);
                     primaryStage.initStyle(StageStyle.DECORATED);
                     primaryStage.resizableProperty().setValue(Boolean.FALSE);
-                    primaryStage.setOnHidden(event -> Platform.exit());
                     primaryStage.setTitle("Wishes Reminder");
                     primaryStage.getIcons().add(new Image("/image/icon.png"));
                     primaryStage.setScene(new Scene(parent, 1185, 585));
