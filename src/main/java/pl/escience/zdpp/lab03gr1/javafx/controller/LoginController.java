@@ -1,6 +1,5 @@
 package pl.escience.zdpp.lab03gr1.javafx.controller;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -11,9 +10,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import pl.escience.zdpp.lab03gr1.app.Main;
-import sun.rmi.runtime.Log;
 
 import java.io.IOException;
 import java.net.URL;
@@ -65,7 +62,7 @@ public class LoginController implements Initializable {
     void buttonRegister_onAction() {
         FXMLLoader loader = new FXMLLoader();
         try {
-            loader.setLocation(getClass().getClassLoader().getResource("fxml/register_account.fxml"));
+            loader.setLocation(getClass().getClassLoader().getResource("fxml/register_or_modify_account.fxml"));
             loader.load();
             Parent parent = loader.getRoot();
             Stage primaryStage = new Stage();
@@ -85,11 +82,13 @@ public class LoginController implements Initializable {
 
     @FXML
     void passwordFieldPassword_onAction() {
-
+        if (!labelInvalidLoginOrPassword.getText().equals(""))
+            labelInvalidLoginOrPassword.setText("");
     }
 
     @FXML
     void textFieldLogin_onAction() {
-
+        if (!labelInvalidLoginOrPassword.getText().equals(""))
+            labelInvalidLoginOrPassword.setText("");
     }
 }

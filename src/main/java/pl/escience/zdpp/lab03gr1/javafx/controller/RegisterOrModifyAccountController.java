@@ -5,11 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import pl.escience.zdpp.lab03gr1.app.Main;
@@ -22,19 +20,45 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class RegisterAccountController implements Initializable {
+public class RegisterOrModifyAccountController implements Initializable {
     private CustomMessageBox customMessageBox;
+    // private User loggedUser;
 
+    @FXML
+    private Button buttonRegister;
     @FXML
     private TextField textFieldName, textFieldSurname, textFieldEmail, textFieldStreet, textFieldPostalCode,
             textFieldCity, textFieldCountry, textFieldLogin;
-
     @FXML
     private Label labelName, labelSurname, labelEmail, labelStreet, labelPostalCode, labelCity, labelCountry,
-            labelLogin, labelPassword, labelConfirmPassword;
-
+            labelLogin, labelPassword, labelConfirmPassword, labelEnterYourData, labelEnterYourPassword;
     @FXML
     private PasswordField passwordFieldPassword, passwordFieldConfirmPassword;
+    @FXML
+    private HBox hBoxSetCurrentData;
+
+    // Method param: User loggedUser
+    public void setUserData() {
+        // this.loggedUser = loggedUser;
+
+        buttonRegister.setText("Modyfikuj");
+        labelEnterYourData.setText("Modyfikuj swoje dane");
+        labelEnterYourPassword.setText("Modyfikuj hasło identyfikujące konto");
+
+        textFieldLogin.setEditable(false);
+        textFieldLogin.setStyle("-fx-background-color: #808080");
+
+        hBoxSetCurrentData.setVisible(true);
+        hBoxSetCurrentData.setDisable(false);
+        hBoxSetCurrentData.setMinWidth(Control.USE_COMPUTED_SIZE);
+        hBoxSetCurrentData.setMinHeight(Control.USE_COMPUTED_SIZE);
+        hBoxSetCurrentData.setPrefHeight(Control.USE_COMPUTED_SIZE);
+        hBoxSetCurrentData.setPrefWidth(Control.USE_COMPUTED_SIZE);
+        hBoxSetCurrentData.setMaxHeight(Control.USE_COMPUTED_SIZE);
+        hBoxSetCurrentData.setMaxWidth(Control.USE_COMPUTED_SIZE);
+
+        //TODO: Wywołanie metody wypełniającej textFields i passwordFields danymi użytkownika.
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -105,58 +129,93 @@ public class RegisterAccountController implements Initializable {
         String password = labelPassword.getText();
         String confirmedPassword = labelConfirmPassword.getText();
 
-        if (name.isEmpty() && surname.isEmpty() && email.isEmpty() && street.isEmpty()
-                && postalCode.isEmpty() && city.isEmpty() && country.isEmpty() && login.isEmpty() && password.isEmpty()
-                && confirmedPassword.isEmpty()) {
-            System.out.println("Użytkownik z adresem.");
-            //TODO: Utworzenie użytkownika wraz z adresem.
+        if (buttonRegister.getText().equals("Zarejestruj")) {
+            if (name.isEmpty() && surname.isEmpty() && email.isEmpty() && street.isEmpty()
+                    && postalCode.isEmpty() && city.isEmpty() && country.isEmpty() && login.isEmpty() && password.isEmpty()
+                    && confirmedPassword.isEmpty()) {
+                //TODO: Utworzenie użytkownika wraz z adresem.
+            } else if (name.isEmpty() && surname.isEmpty() && email.isEmpty()
+                    && street.equals("Podaj ulicę i nr domu/mieszkania.") && postalCode.equals("Podaj kod pocztowy.")
+                    && city.equals("Podaj miasto.") && country.equals("Podaj kraj.") && login.isEmpty()
+                    && password.isEmpty() && confirmedPassword.isEmpty()) {
+                ;
+                //TODO: Utworzenie użytkownika bez adresu.
+            } else
+                customMessageBox.showMessageBox(Alert.AlertType.WARNING, "Ostrzeżenie",
+                        "Operacja rejestracji nie powiedzie się.",
+                        "Powód: Nie wszystkie wartości mają poprawny format.")
+                        .showAndWait();
+        } else {
+            if (name.isEmpty() && surname.isEmpty() && email.isEmpty() && street.isEmpty()
+                    && postalCode.isEmpty() && city.isEmpty() && country.isEmpty() && login.isEmpty() && password.isEmpty()
+                    && confirmedPassword.isEmpty()) {
+                // TODO: Modyfikacja użytkownika z adresem. Sprawdzenie czy użytkownik posiada adres.
+                // TODO: Jeżeli tak to modyfikacja adresu, w przeciwnym razie utworzenie adresu użytkownika.
+            } else if (name.isEmpty() && surname.isEmpty() && email.isEmpty()
+                    && street.equals("Podaj ulicę i nr domu/mieszkania.") && postalCode.equals("Podaj kod pocztowy.")
+                    && city.equals("Podaj miasto.") && country.equals("Podaj kraj.") && login.isEmpty()
+                    && password.isEmpty() && confirmedPassword.isEmpty()) {
+                System.out.println("Użytkownik bez adresu.");
+                // TODO: Modyfikacja użytkownika bez adresu. Sprawdzenie czy użytkownik posiada adres.
+                // TODO: Jeżeli tak to usunięcie adresu użytkownika.
+            } else
+                customMessageBox.showMessageBox(Alert.AlertType.WARNING, "Ostrzeżenie",
+                        "Operacja modyfikacji danych nie powiedzie się.",
+                        "Powód: Nie wszystkie wartości mają poprawny format.")
+                        .showAndWait();
         }
-        else if (name.isEmpty() && surname.isEmpty() && email.isEmpty()
-                && street.equals("Podaj ulicę i nr domu/mieszkania.") && postalCode.equals("Podaj kod pocztowy.")
-                && city.equals("Podaj miasto.") && country.equals("Podaj kraj.") && login.isEmpty()
-                && password.isEmpty() && confirmedPassword.isEmpty()) {
-            System.out.println("Użytkownik bez adresu.");
-            //TODO: Utworzenie użytkownika bez adresu.
-        }
-        else
-            customMessageBox.showMessageBox(Alert.AlertType.WARNING, "Ostrzeżenie",
-                    "Operacja rejestracji nie powiedzie się.",
-                    "Powód: Nie wszystkie wartości mają poprawny format.")
-                    .showAndWait();
     }
 
     @FXML
     void buttonCancel_onAction() {
-        FXMLLoader loader = new FXMLLoader();
-        try {
-            loader.setLocation(getClass().getClassLoader().getResource("fxml/login.fxml"));
-            loader.load();
-            Parent parent = loader.getRoot();
-            Stage primaryStage = new Stage();
-            Main.setMainStage(primaryStage);
-            primaryStage.initStyle(StageStyle.DECORATED);
-            primaryStage.resizableProperty().setValue(Boolean.FALSE);
-            primaryStage.setTitle("Wishes Reminder");
-            primaryStage.getIcons().add(new Image("/image/icon.png"));
-            primaryStage.setScene(new Scene(parent, 1184, 585));
+        if (buttonRegister.getText().equals("Zarejestruj")) {
+            FXMLLoader loader = new FXMLLoader();
+            try {
+                loader.setLocation(getClass().getClassLoader().getResource("fxml/login.fxml"));
+                loader.load();
+                Parent parent = loader.getRoot();
+                Stage primaryStage = new Stage();
+                Main.setMainStage(primaryStage);
+                primaryStage.initStyle(StageStyle.DECORATED);
+                primaryStage.resizableProperty().setValue(Boolean.FALSE);
+                primaryStage.setTitle("Wishes Reminder");
+                primaryStage.getIcons().add(new Image("/image/icon.png"));
+                primaryStage.setScene(new Scene(parent, 1184, 585));
 
-            Stage stage = (Stage) textFieldCity.getScene().getWindow();
-            stage.hide();
-            primaryStage.show();
-        } catch (IOException ioEcx) {
-            Logger.getLogger(WelcomeBannerController.class.getName()).log(Level.SEVERE, null, ioEcx);
+                Stage stage = (Stage) textFieldCity.getScene().getWindow();
+                stage.hide();
+                primaryStage.show();
+            } catch (IOException ioEcx) {
+                Logger.getLogger(WelcomeBannerController.class.getName()).log(Level.SEVERE, null, ioEcx);
+            }
+        } else {
+            Stage stage = (Stage) textFieldLogin.getScene().getWindow();
+            stage.close();
         }
+    }
+
+    @FXML
+    void buttonSetCurrentData_onAction() {
+        // TODO: Wywołanie metody wypełniającej textFields i passwordFields danymi użytkownika.
+    }
+
+    private void fillFieldsByUserData() {
+        // textFieldName.setText(loggedUser.getFirstName);
+        // ...
     }
 
     @SuppressWarnings("Duplicates")
     private void changePasswordFieldText() {
         if (passwordFieldPassword.getText().isEmpty())
             labelPassword.setText("Podaj hasło.");
-        else if (!passwordFieldPassword.getText().matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,20}$"))
+        else if (!passwordFieldPassword.getText().matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])" +
+                "(?=.*[@#$%^&+=])(?=\\S+$).{8,20}$"))
             labelPassword.setText("Niepoprawny format.");
-        else if (labelConfirmPassword.getText().isEmpty() && !(passwordFieldConfirmPassword.getText().equals(passwordFieldPassword.getText())))
+        else if (labelConfirmPassword.getText().isEmpty() && !(passwordFieldConfirmPassword
+                .getText().equals(passwordFieldPassword.getText())))
             labelConfirmPassword.setText("Hasła nie zgadzają się.");
-        else if (labelConfirmPassword.getText().equals("Hasła nie zgadzają się.") && (passwordFieldConfirmPassword.getText().equals(passwordFieldPassword.getText())))
+        else if (labelConfirmPassword.getText().equals("Hasła nie zgadzają się.")
+                && (passwordFieldConfirmPassword.getText().equals(passwordFieldPassword.getText())))
             labelConfirmPassword.setText("");
         else
             labelPassword.setText("");
@@ -166,11 +225,14 @@ public class RegisterAccountController implements Initializable {
     private void changeConfirmPasswordFieldText() {
         if (passwordFieldConfirmPassword.getText().isEmpty())
             labelConfirmPassword.setText("Ponownie wprowadź hasło.");
-        else if (!passwordFieldConfirmPassword.getText().matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,20}$"))
+        else if (!passwordFieldConfirmPassword.getText().matches("^(?=.*[0-9])" +
+                "(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,20}$"))
             labelConfirmPassword.setText("Niepoprawny format.");
-        else if (labelPassword.getText().isEmpty() && !(passwordFieldConfirmPassword.getText().equals(passwordFieldPassword.getText())))
+        else if (labelPassword.getText().isEmpty() && !(passwordFieldConfirmPassword
+                .getText().equals(passwordFieldPassword.getText())))
             labelConfirmPassword.setText("Hasła nie zgadzają się.");
-        else if (labelConfirmPassword.getText().equals("Hasła nie zgadzają się.") && (passwordFieldConfirmPassword.getText().equals(passwordFieldPassword.getText())))
+        else if (labelConfirmPassword.getText().equals("Hasła nie zgadzają się.")
+                && (passwordFieldConfirmPassword.getText().equals(passwordFieldPassword.getText())))
             labelConfirmPassword.setText("");
         else
             labelConfirmPassword.setText("");
