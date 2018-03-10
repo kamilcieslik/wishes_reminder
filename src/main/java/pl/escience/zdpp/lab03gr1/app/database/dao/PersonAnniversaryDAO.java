@@ -35,13 +35,13 @@ public class PersonAnniversaryDAO {
     }
 
     public PersonAnniversary getEntity(int id) {
-        PersonAnniversary relation;
+        PersonAnniversary personAnniversary;
         try (Session currentSession = sessionFactory.getCurrentSession()) {
             currentSession.beginTransaction();
-            relation = currentSession.get(PersonAnniversary.class, id);
+            personAnniversary = currentSession.get(PersonAnniversary.class, id);
             currentSession.getTransaction().commit();
         }
-        return relation;
+        return personAnniversary;
     }
 
     public void deleteEntity(int id) {
