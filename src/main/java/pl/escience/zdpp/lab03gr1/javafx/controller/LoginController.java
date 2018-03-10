@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import pl.escience.zdpp.lab03gr1.app.Main;
+import sun.rmi.runtime.Log;
 
 import java.io.IOException;
 import java.net.URL;
@@ -62,7 +63,24 @@ public class LoginController implements Initializable {
 
     @FXML
     void buttonRegister_onAction() {
-
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            loader.setLocation(getClass().getClassLoader().getResource("fxml/register_account.fxml"));
+            loader.load();
+            Parent parent = loader.getRoot();
+            Stage primaryStage = new Stage();
+            Main.setMainStage(primaryStage);
+            primaryStage.setTitle("Wishes Reminder");
+            primaryStage.getIcons().add(new Image("/image/icon.png"));
+            primaryStage.setMinWidth(1100);
+            primaryStage.setMinHeight(765);
+            primaryStage.setScene(new Scene(parent, 1200, 780));
+            Stage stage = (Stage) textFieldLogin.getScene().getWindow();
+            stage.hide();
+            primaryStage.show();
+        } catch (IOException ioEcx) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ioEcx);
+        }
     }
 
     @FXML

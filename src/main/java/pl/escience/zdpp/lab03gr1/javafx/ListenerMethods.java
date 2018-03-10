@@ -10,11 +10,14 @@ public class ListenerMethods {
 
     }
 
-    public void changeLabelTextField(String regex, TextField textField, Label label, String isEmpty, String doesNotFit) {
+    public void changeLabelTextField(String regex, TextField textField, Label label, String isEmpty, String doesNotFit,
+                                     Integer length, String tooLong) {
         if (textField.getText().isEmpty())
             label.setText(isEmpty);
         else if (!textField.getText().matches(regex))
             label.setText(doesNotFit);
+        else if (textField.getText().length() > length)
+            label.setText(tooLong);
         else
             label.setText("");
     }
