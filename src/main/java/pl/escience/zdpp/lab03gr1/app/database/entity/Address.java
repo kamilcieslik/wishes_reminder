@@ -1,6 +1,7 @@
 package pl.escience.zdpp.lab03gr1.app.database.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "address")
@@ -22,6 +23,11 @@ public class Address {
     @Column(name = "country")
     private String country;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<User> users;
+
+    @OneToMany(mappedBy = "person_anniversary", cascade = CascadeType.ALL)
+    private List<PersonAnniversary> personAnniversaries;
     public Address() {
     }
 

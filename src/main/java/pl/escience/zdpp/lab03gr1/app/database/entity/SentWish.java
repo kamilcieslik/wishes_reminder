@@ -23,6 +23,10 @@ public class SentWish {
     @Column(name = "sent_by_email")
     private Boolean sentByEmail;
 
+    @ManyToOne(cascade = {CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH})
     @JoinColumn(name = "person_anniversary_id")
     private PersonAnniversary personAnniversary;
 

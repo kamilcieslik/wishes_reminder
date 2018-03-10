@@ -1,6 +1,5 @@
 package pl.escience.zdpp.lab03gr1.app.database.entity;
 
-import javax.management.relation.Relation;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -28,12 +27,21 @@ public class PersonAnniversary {
     @Column(name = "birthday")
     private Boolean birthday;
 
+    @ManyToOne(cascade = {CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
 
+    @ManyToOne(cascade = {CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH})
     @JoinColumn(name = "relation_id")
     private Relation relation;
 
