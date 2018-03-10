@@ -1,33 +1,32 @@
 package pl.escience.zdpp.lab03gr1.app.database.dao;
 
-import com.sun.org.apache.regexp.internal.RE;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import pl.escience.zdpp.lab03gr1.app.database.entity.Address;
-import pl.escience.zdpp.lab03gr1.app.database.entity.Relation;
+import pl.escience.zdpp.lab03gr1.app.database.entity.SentWish;
 
 import java.util.List;
 
-public class RelationDAO {
+public class SentWishDAO {
     private final SessionFactory sessionFactory;
 
-    public RelationDAO(SessionFactory sessionFactory) {
+    public SentWishDAO(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
-    public List<Relation> getEntities() {
-        List<Relation> relations;
+    public List<SentWish> getEntities() {
+        List<SentWish> sentWishes;
         try (Session currentSession = sessionFactory.getCurrentSession()) {
             currentSession.beginTransaction();
-            Query<Relation> theQuery = currentSession.createQuery("from relation", Relation.class);
-            relations = theQuery.getResultList();
+            Query<SentWish> theQuery = currentSession.createQuery("from sent_wish", SentWish.class);
+            sentWishes = theQuery.getResultList();
             currentSession.getTransaction().commit();
         }
-        return relations;
+        return sentWishes;
     }
 
-    public void saveEntity(Relation entity)  {
+    public void saveEntity(SentWish entity)  {
         Session currentSession = sessionFactory.getCurrentSession();
         currentSession.beginTransaction();
         currentSession.saveOrUpdate(entity);
@@ -35,21 +34,21 @@ public class RelationDAO {
 
     }
 
-    public Relation getEntity(int id) {
-        Relation relation;
+    public SentWish getEntity(int id) {
+        SentWish sentWish;
         try (Session currentSession = sessionFactory.getCurrentSession()) {
             currentSession.beginTransaction();
-            relation = currentSession.get(Relation.class, id);
+            sentWish = currentSession.get(SentWish.class, id);
             currentSession.getTransaction().commit();
         }
-        return relation;
+        return sentWish;
     }
 
     public void deleteEntity(int id) {
         try (Session currentSession = sessionFactory.getCurrentSession()) {
             currentSession.beginTransaction();
-            currentSession.createQuery("delete from relation where id=:relationId")
-                    .setParameter("relationId", id).executeUpdate();
+            currentSession.createQuery("delete from sent_wish where id=:sentWishId")
+                    .setParameter("sentWishId", id).executeUpdate();
             currentSession.getTransaction().commit();
         }
     }
