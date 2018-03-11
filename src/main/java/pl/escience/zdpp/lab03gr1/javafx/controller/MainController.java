@@ -82,7 +82,26 @@ public class MainController implements Initializable {
 
     @FXML
     void buttonAddPersonAnniversary_onAction() {
+        // TODO:
 
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            loader.setLocation(getClass().getClassLoader().getResource("fxml/add_or_modify_person_anniversary.fxml"));
+            loader.load();
+            Parent parent = loader.getRoot();
+            Stage primaryStage = new Stage();
+            Main.setMainStage(primaryStage);
+            primaryStage.setTitle("Wishes Reminder");
+            primaryStage.getIcons().add(new Image("/image/icon.png"));
+            primaryStage.setMinWidth(1100);
+            primaryStage.setMinHeight(765);
+            primaryStage.setScene(new Scene(parent, 1200, 780));
+            Stage stage = (Stage) textAreaNewWishText.getScene().getWindow();
+            stage.hide();
+            primaryStage.show();
+        } catch (IOException ioEcx) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ioEcx);
+        }
     }
 
     @FXML
@@ -93,6 +112,26 @@ public class MainController implements Initializable {
     @FXML
     void buttonModifyPersonAnniversary_onAction() {
 
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            loader.setLocation(getClass().getClassLoader().getResource("fxml/add_or_modify_person_anniversary.fxml"));
+            loader.load();
+            AddOrModifyPersonAnniversary controller = loader.getController();
+            controller.initPersonAnniversaryData();
+            Parent parent = loader.getRoot();
+            Stage primaryStage = new Stage();
+            Main.setMainStage(primaryStage);
+            primaryStage.setTitle("Wishes Reminder");
+            primaryStage.getIcons().add(new Image("/image/icon.png"));
+            primaryStage.setMinWidth(1100);
+            primaryStage.setMinHeight(765);
+            primaryStage.setScene(new Scene(parent, 1200, 780));
+            Stage stage = (Stage) textAreaNewWishText.getScene().getWindow();
+            stage.hide();
+            primaryStage.show();
+        } catch (IOException ioEcx) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ioEcx);
+        }
     }
 
     @FXML

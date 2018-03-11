@@ -16,7 +16,7 @@
 <?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1"
+      prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/8.0.162" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="pl.escience.zdpp.lab03gr1.javafx.controller.WishTemplatesController">
     <HBox alignment="CENTER" prefHeight="70.0" prefWidth="200.0"
           style="-fx-background-color: grey; -fx-border-width: 1; -fx-border-color: #000;"
