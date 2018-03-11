@@ -61,6 +61,12 @@ public class ViewExtendedPersonAnniversary {
     @Column(name = "number_of_sent_wishes")
     private Integer numberOfSentWishes;
 
+    @Transient
+    private Integer numberOfDaysToNextAnniversary;
+
+    @Transient
+    private Date nextAnniversaryDate;
+
     public ViewExtendedPersonAnniversary() {
     }
 
@@ -148,6 +154,33 @@ public class ViewExtendedPersonAnniversary {
 
     public Integer getNumberOfSentWishes() {
         return numberOfSentWishes;
+    }
+
+    public void calculateNextAnniversaryFields() {
+        Calendar anniversaryDate = Calendar.getInstance();
+        anniversaryDate.setTime(this.anniversaryDate);
+
+        int anniversaryDateMonth = anniversaryDate.get(Calendar.MONTH) + 1;
+        int anniversaryDateDay = anniversaryDate.get(Calendar.DAY_OF_MONTH);
+
+        Calendar dateNow = Calendar.getInstance();
+        int dateNowYear = dateNow.get(Calendar.YEAR);
+        int dateNowMonth = dateNow.get(Calendar.MONTH) + 1;
+        int dateNowDay = dateNow.get(Calendar.DAY_OF_MONTH);
+
+        Calendar nextAnniversaryDate = Calendar.getInstance();
+        nextAnniversaryDate.set(Calendar.DAY_OF_MONTH, anniversaryDateDay);
+        nextAnniversaryDate.set(Calendar.MONTH, anniversaryDateMonth - 1);
+
+        if ((dateNowMonth == anniversaryDateMonth && dateNowDay <= anniversaryDateDay)
+                || (dateNowMonth < anniversaryDateMonth))
+            nextAnniversaryDate.set(Calendar.YEAR, dateNowYear);
+        else
+            nextAnniversaryDate.set(Calendar.YEAR, dateNowYear + 1);
+        this.nextAnniversaryDate = nextAnniversaryDate.getTime();
+
+        long numberOfDaysToNextAnniversary = nextAnniversaryDate.getTime().getTime() - dateNow.getTime().getTime();
+        this.numberOfDaysToNextAnniversary = Math.toIntExact(numberOfDaysToNextAnniversary / 1000 / 60 / 60 / 24);
     }
 
 
