@@ -1,10 +1,11 @@
-package pl.escience.zdpp.lab03gr1.app.database.entity;
+package pl.escience.zdpp.lab03gr1.database.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "wish_template")
+@Table(name = "relation")
 public class Relation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,14 +15,10 @@ public class Relation {
     @Column(name = "relation_name")
     private String ralationName;
 
-    @OneToMany(mappedBy = "person_anniversary", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "relation", cascade = CascadeType.ALL)
     private List<PersonAnniversary> personAnniversaries;
 
     public Relation() {
-    }
-
-    public Relation(String ralationName) {
-        this.ralationName = ralationName;
     }
 
     public Integer getId() {
@@ -48,8 +45,16 @@ public class Relation {
         this.personAnniversaries = personAnniversaries;
     }
 
+    public void addPersonAnniverasry(PersonAnniversary personAnniversary) {
+        if (personAnniversaries == null)
+            personAnniversaries = new ArrayList<>();
+
+        personAnniversaries.add(personAnniversary);
+        personAnniversary.setRelation(this);
+    }
+
     @Override
     public String toString() {
-        return "Relation{" + "id=" + id + ", ralationName='" + ralationName + '\'' + ", personAnniversaries=" + personAnniversaries + '}';
+        return ralationName;
     }
 }

@@ -1,7 +1,10 @@
-package pl.escience.zdpp.lab03gr1.app.database.service;
+package pl.escience.zdpp.lab03gr1.database.service;
 
-import pl.escience.zdpp.lab03gr1.app.database.dao.*;
-import pl.escience.zdpp.lab03gr1.app.database.entity.*;
+import org.hibernate.SessionFactory;
+import pl.escience.zdpp.lab03gr1.database.dao.*;
+import pl.escience.zdpp.lab03gr1.database.entity.*;
+import pl.escience.zdpp.lab03gr1.database.exception.UniqueViolationException;
+import pl.escience.zdpp.lab03gr1.database.view.ViewExtendedPersonAnniversary;
 
 import java.util.List;
 
@@ -12,14 +15,16 @@ public class ReminderService {
     private SentWishDAO sentWishDAO;
     private UserDAO userDAO;
     private WishTemplateDAO wishTemplateDAO;
+    private ViewExtendedPersonAnniversaryDAO viewExtendedPersonAnniversaryDAO;
 
-    public ReminderService(AddressDAO addressDAO, PersonAnniversaryDAO personAnniversaryDAO, RelationDAO relationDAO, SentWishDAO sentWishDAO, UserDAO userDAO, WishTemplateDAO wishTemplateDAO) {
-        this.addressDAO = addressDAO;
-        this.personAnniversaryDAO = personAnniversaryDAO;
-        this.relationDAO = relationDAO;
-        this.sentWishDAO = sentWishDAO;
-        this.userDAO = userDAO;
-        this.wishTemplateDAO = wishTemplateDAO;
+    public ReminderService(SessionFactory sessionFactory) {
+        addressDAO = new AddressDAO(sessionFactory);
+        personAnniversaryDAO = new PersonAnniversaryDAO(sessionFactory);
+        relationDAO = new RelationDAO(sessionFactory);
+        sentWishDAO = new SentWishDAO(sessionFactory);
+        userDAO = new UserDAO(sessionFactory);
+        wishTemplateDAO = new WishTemplateDAO(sessionFactory);
+        viewExtendedPersonAnniversaryDAO = new ViewExtendedPersonAnniversaryDAO(sessionFactory);
     }
 
     public List<Address> getAddresses() {
@@ -42,7 +47,7 @@ public class ReminderService {
         return userDAO.getEntities();
     }
 
-    public void saveUsers(User user) {
+    public void saveUser(User user) throws UniqueViolationException {
         userDAO.saveEntity(user);
     }
 
@@ -50,16 +55,19 @@ public class ReminderService {
         return userDAO.getEntity(id);
     }
 
+    public User getUserByLogin(String login) {
+        return userDAO.getEntityByLogin(login);
+    }
+
     public void deleteUser(int id) {
         userDAO.deleteEntity(id);
     }
-
 
     public List<SentWish> getSentWishes() {
         return sentWishDAO.getEntities();
     }
 
-    public void saveUsers(SentWish sentWish) {
+    public void saveSentWish(SentWish sentWish) {
         sentWishDAO.saveEntity(sentWish);
     }
 
@@ -119,4 +127,15 @@ public class ReminderService {
         personAnniversaryDAO.deleteEntity(id);
     }
 
+    public List<ViewExtendedPersonAnniversary> getViewExtendedContacts() {
+        return viewExtendedPersonAnniversaryDAO.getEntities();
+    }
+
+    public List<ViewExtendedPersonAnniversary> getViewExtendedContactsByUserId(int userId) {
+        return viewExtendedPersonAnniversaryDAO.getEntitiesByUserId(userId);
+    }
+
+    public ViewExtendedPersonAnniversary getViewExtendedContact(int id) {
+        return viewExtendedPersonAnniversaryDAO.getEntity(id);
+    }
 }

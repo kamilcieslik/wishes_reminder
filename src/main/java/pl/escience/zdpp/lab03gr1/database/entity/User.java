@@ -1,12 +1,11 @@
-package pl.escience.zdpp.lab03gr1.app.database.entity;
-
-import com.sun.jndi.cosnaming.IiopUrl;
+package pl.escience.zdpp.lab03gr1.database.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "account")
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -121,8 +120,31 @@ public class User {
         this.personAnniversaries = personAnniversaries;
     }
 
+    public void addWishTemplate(WishTemplate wishTemplate) {
+        if (wishTemplates == null)
+            wishTemplates = new ArrayList<>();
+
+        wishTemplates.add(wishTemplate);
+        wishTemplate.setUser(this);
+    }
+
+    public void addPersonAnniversary(PersonAnniversary personAnniversary) {
+        if (personAnniversaries == null)
+            personAnniversaries = new ArrayList<>();
+
+        personAnniversaries.add(personAnniversary);
+        personAnniversary.setUser(this);
+    }
+
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", login='" + login + '\'' + ", password='" + password + '\'' + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", email='" + email + '\'' + '}';
+        return "User{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

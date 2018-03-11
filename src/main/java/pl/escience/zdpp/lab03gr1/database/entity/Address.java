@@ -1,7 +1,6 @@
-package pl.escience.zdpp.lab03gr1.app.database.entity;
+package pl.escience.zdpp.lab03gr1.database.entity;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "address")
@@ -23,11 +22,18 @@ public class Address {
     @Column(name = "country")
     private String country;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<User> users;
+    @OneToOne(mappedBy = "address", cascade = {CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH})
+    private User user;
 
-    @OneToMany(mappedBy = "person_anniversary", cascade = CascadeType.ALL)
-    private List<PersonAnniversary> personAnniversaries;
+    @OneToOne(mappedBy = "address", cascade = {CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH})
+    private PersonAnniversary personAnniversary;
+
     public Address() {
     }
 
@@ -78,8 +84,30 @@ public class Address {
         this.country = country;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public PersonAnniversary getPersonAnniversary() {
+        return personAnniversary;
+    }
+
+    public void setPersonAnniversary(PersonAnniversary personAnniversary) {
+        this.personAnniversary = personAnniversary;
+    }
+
     @Override
     public String toString() {
-        return "AddressDAO{" + "id=" + id + ", street='" + street + '\'' + ", city='" + city + '\'' + ", postalCode='" + postalCode + '\'' + ", country='" + country + '\'' + '}';
+        return "AddressDAO{" +
+                "id=" + id + "," +
+                " street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                ", country='" + country + '\'' +
+                '}';
     }
 }

@@ -1,4 +1,4 @@
-package pl.escience.zdpp.lab03gr1.app.database.entity;
+package pl.escience.zdpp.lab03gr1.database.entity;
 
 import javax.persistence.*;
 
@@ -18,7 +18,7 @@ public class WishTemplate {
             CascadeType.PERSIST,
             CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
-    private User UserId;
+    private User user;
 
     public WishTemplate() {
     }
@@ -43,16 +43,19 @@ public class WishTemplate {
         this.text = text;
     }
 
-    public User getUserId() {
-        return UserId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(User userId) {
-        UserId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
     public String toString() {
-        return "WishTemplate{" + "id=" + id + ", text='" + text + '\'' + '}';
+        return "WishTemplate{" +
+                "id=" + id + "," +
+                " text='" + text + '\'' +
+                '}';
     }
 }

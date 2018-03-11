@@ -1,6 +1,7 @@
-package pl.escience.zdpp.lab03gr1.app.database.entity;
+package pl.escience.zdpp.lab03gr1.database.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class PersonAnniversary {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
 
@@ -45,7 +46,7 @@ public class PersonAnniversary {
     @JoinColumn(name = "relation_id")
     private Relation relation;
 
-    @OneToMany(mappedBy = "sent_wish", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "personAnniversary", cascade = CascadeType.ALL)
     private List<SentWish> sentWishes;
 
     public PersonAnniversary() {
@@ -139,9 +140,24 @@ public class PersonAnniversary {
         this.sentWishes = sentWishes;
     }
 
+    public void addSentWish(SentWish sentWish){
+        if (sentWishes == null)
+            sentWishes = new ArrayList<>();
+
+        sentWishes.add(sentWish);
+        sentWish.setPersonAnniversary(this);
+    }
+
     @Override
     public String toString() {
-        return "PersonAnniversary{" + "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", anniversaryDate=" + anniversaryDate + ", email='" + email + '\'' + ", birthday=" + birthday + '}';
+        return "PersonAnniversary{" +
+                "id=" + id + "," +
+                " firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", anniversaryDate=" + anniversaryDate +
+                ", email='" + email + '\'' +
+                ", birthday=" + birthday +
+                '}';
     }
 
 }

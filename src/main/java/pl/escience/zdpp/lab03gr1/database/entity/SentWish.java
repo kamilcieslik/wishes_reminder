@@ -1,4 +1,4 @@
-package pl.escience.zdpp.lab03gr1.app.database.entity;
+package pl.escience.zdpp.lab03gr1.database.entity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -78,5 +78,24 @@ public class SentWish {
 
     public void setSentByEmail(Boolean sentByEmail) {
         this.sentByEmail = sentByEmail;
+    }
+
+    public PersonAnniversary getPersonAnniversary() {
+        return personAnniversary;
+    }
+
+    public void setPersonAnniversary(PersonAnniversary personAnniversary) {
+        this.personAnniversary = personAnniversary;
+    }
+
+    @Override
+    public String toString() {
+        return "SentWish{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", postDate=" + postDate +
+                ", sentByLetter=" + sentByLetter +
+                ", sentByEmail=" + sentByEmail +
+                '}';
     }
 }
