@@ -37,16 +37,13 @@ public class RegisterOrModifyAccountController implements Initializable {
     @FXML
     private HBox hBoxSetCurrentData;
 
-    // Method param: User loggedUser
-    public void setUserData() {
-        // this.loggedUser = loggedUser;
-
+    public void initUserData() {
         buttonRegister.setText("Modyfikuj");
         labelEnterYourData.setText("Modyfikuj swoje dane");
         labelEnterYourPassword.setText("Modyfikuj hasło identyfikujące konto");
 
         textFieldLogin.setEditable(false);
-        textFieldLogin.setStyle("-fx-background-color: #808080");
+        textFieldLogin.setStyle("-fx-background-color: #808080; -fx-background-radius: 20");
 
         hBoxSetCurrentData.setVisible(true);
         hBoxSetCurrentData.setDisable(false);
@@ -133,13 +130,14 @@ public class RegisterOrModifyAccountController implements Initializable {
             if (name.isEmpty() && surname.isEmpty() && email.isEmpty() && street.isEmpty()
                     && postalCode.isEmpty() && city.isEmpty() && country.isEmpty() && login.isEmpty() && password.isEmpty()
                     && confirmedPassword.isEmpty()) {
-                //TODO: Utworzenie użytkownika wraz z adresem.
+                // TODO: Utworzenie użytkownika wraz z adresem. Przejście do głównej sceny jako zalogowany użytkownik.
+                // TODO: Przejście do głównej sceny z wywołaniem metody initUserData(loggedUser).
             } else if (name.isEmpty() && surname.isEmpty() && email.isEmpty()
                     && street.equals("Podaj ulicę i nr domu/mieszkania.") && postalCode.equals("Podaj kod pocztowy.")
                     && city.equals("Podaj miasto.") && country.equals("Podaj kraj.") && login.isEmpty()
                     && password.isEmpty() && confirmedPassword.isEmpty()) {
-                ;
-                //TODO: Utworzenie użytkownika bez adresu.
+                // TODO: Utworzenie użytkownika bez adresu. Przejście do głównej sceny jako zalogowany użytkownik.
+                // TODO: Przejście do głównej sceny z wywołaniem metody initUserData(loggedUser).
             } else
                 customMessageBox.showMessageBox(Alert.AlertType.WARNING, "Ostrzeżenie",
                         "Operacja rejestracji nie powiedzie się.",
@@ -151,6 +149,7 @@ public class RegisterOrModifyAccountController implements Initializable {
                     && confirmedPassword.isEmpty()) {
                 // TODO: Modyfikacja użytkownika z adresem. Sprawdzenie czy użytkownik posiada adres.
                 // TODO: Jeżeli tak to modyfikacja adresu, w przeciwnym razie utworzenie adresu użytkownika.
+                // TODO: Powrót do głównej sceny z wywołaniem metody initUserData(loggedUser).
             } else if (name.isEmpty() && surname.isEmpty() && email.isEmpty()
                     && street.equals("Podaj ulicę i nr domu/mieszkania.") && postalCode.equals("Podaj kod pocztowy.")
                     && city.equals("Podaj miasto.") && country.equals("Podaj kraj.") && login.isEmpty()
@@ -158,6 +157,7 @@ public class RegisterOrModifyAccountController implements Initializable {
                 System.out.println("Użytkownik bez adresu.");
                 // TODO: Modyfikacja użytkownika bez adresu. Sprawdzenie czy użytkownik posiada adres.
                 // TODO: Jeżeli tak to usunięcie adresu użytkownika.
+                // TODO: Powrót do głównej sceny z wywołaniem metody initUserData(loggedUser).
             } else
                 customMessageBox.showMessageBox(Alert.AlertType.WARNING, "Ostrzeżenie",
                         "Operacja modyfikacji danych nie powiedzie się.",
@@ -189,8 +189,24 @@ public class RegisterOrModifyAccountController implements Initializable {
                 Logger.getLogger(WelcomeBannerController.class.getName()).log(Level.SEVERE, null, ioEcx);
             }
         } else {
-            Stage stage = (Stage) textFieldLogin.getScene().getWindow();
-            stage.close();
+            FXMLLoader loader = new FXMLLoader();
+            try {
+                loader.setLocation(getClass().getClassLoader().getResource("fxml/main.fxml"));
+                loader.load();
+                Parent parent = loader.getRoot();
+                Stage primaryStage = new Stage();
+                Main.setMainStage(primaryStage);
+                primaryStage.setTitle("Wishes Reminder");
+                primaryStage.getIcons().add(new Image("/image/icon.png"));
+                primaryStage.setMinWidth(950);
+                primaryStage.setMinHeight(890);
+                primaryStage.setScene(new Scene(parent, 1601, 900));
+                Stage stage = (Stage) textFieldCity.getScene().getWindow();
+                stage.hide();
+                primaryStage.show();
+            } catch (IOException ioEcx) {
+                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ioEcx);
+            }
         }
     }
 

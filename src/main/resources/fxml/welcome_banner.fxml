@@ -14,7 +14,8 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="325.0"
       prefWidth="819.0" style="-fx-border-color: white; -fx-border-width: 1;" styleClass="welcomeBannerThemeContainer"
-      stylesheets="@../css/application_style.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1"
+      stylesheets="@../css/application_style.css" xmlns="http://javafx.com/javafx/8.0.162"
+      xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="pl.escience.zdpp.lab03gr1.javafx.controller.WelcomeBannerController">
     <HBox alignment="CENTER" prefHeight="65.0" prefWidth="815.0" VBox.vgrow="ALWAYS">
         <VBox.margin>

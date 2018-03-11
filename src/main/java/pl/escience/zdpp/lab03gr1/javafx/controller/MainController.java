@@ -1,15 +1,25 @@
 package pl.escience.zdpp.lab03gr1.javafx.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import pl.escience.zdpp.lab03gr1.app.Main;
 import pl.escience.zdpp.lab03gr1.javafx.CustomMessageBox;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MainController implements Initializable {
     private CustomMessageBox customMessageBox;
@@ -52,6 +62,11 @@ public class MainController implements Initializable {
     @FXML
     private TextField textFieldNewWishEmailSubject;
 
+    public void initUserData() {
+        // TODO: Wypełnienie tablicy wydarzeń (personAnniversaries).
+        // TODO: bservableList.addAll(personAnniversariesExtendedView.getEntitiesByUserId(loggedUser.getId()));
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         customMessageBox = new CustomMessageBox("image/icon.png");
@@ -82,12 +97,70 @@ public class MainController implements Initializable {
 
     @FXML
     void menuItemModifyUserProfile_onAction() {
-
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            loader.setLocation(getClass().getClassLoader().getResource("fxml/register_or_modify_account.fxml"));
+            loader.load();
+            RegisterOrModifyAccountController controller = loader.getController();
+            controller.initUserData();
+            Parent parent = loader.getRoot();
+            Stage primaryStage = new Stage();
+            Main.setMainStage(primaryStage);
+            primaryStage.setTitle("Wishes Reminder");
+            primaryStage.getIcons().add(new Image("/image/icon.png"));
+            primaryStage.setMinWidth(1100);
+            primaryStage.setMinHeight(765);
+            primaryStage.setScene(new Scene(parent, 1200, 780));
+            Stage stage = (Stage) textAreaNewWishText.getScene().getWindow();
+            stage.hide();
+            primaryStage.show();
+        } catch (IOException ioEcx) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ioEcx);
+        }
     }
 
     @FXML
     void menuItemModifyWishTemplates_onAction() {
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            loader.setLocation(getClass().getClassLoader().getResource("fxml/wish_templates.fxml"));
+            loader.load();
+            Parent parent = loader.getRoot();
+            Stage primaryStage = new Stage();
+            Main.setMainStage(primaryStage);
+            primaryStage.setTitle("Wishes Reminder");
+            primaryStage.getIcons().add(new Image("/image/icon.png"));
+            primaryStage.setMinWidth(1100);
+            primaryStage.setMinHeight(765);
+            primaryStage.setScene(new Scene(parent, 1600, 900));
+            Stage stage = (Stage) textAreaNewWishText.getScene().getWindow();
+            stage.hide();
+            primaryStage.show();
+        } catch (IOException ioEcx) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ioEcx);
+        }
+    }
 
+    @FXML
+    void menuItemLogout_onAction() {
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            loader.setLocation(getClass().getClassLoader().getResource("fxml/login.fxml"));
+            loader.load();
+            Parent parent = loader.getRoot();
+            Stage primaryStage = new Stage();
+            Main.setMainStage(primaryStage);
+            primaryStage.initStyle(StageStyle.DECORATED);
+            primaryStage.resizableProperty().setValue(Boolean.FALSE);
+            primaryStage.setTitle("Wishes Reminder");
+            primaryStage.getIcons().add(new Image("/image/icon.png"));
+            primaryStage.setScene(new Scene(parent, 1186, 585));
+            Stage stage = (Stage) textAreaNewWishText.getScene().getWindow();
+            stage.hide();
+            primaryStage.show();
+        } catch (IOException ioEcx) {
+            Logger.getLogger(WelcomeBannerController.class.getName()).log(Level.SEVERE, null, ioEcx);
+        }
     }
 
     @FXML
@@ -260,6 +333,6 @@ public class MainController implements Initializable {
     }
 
     private void initTableViews() {
-        //TODO:
+        //TODO: Set tableViews properties.
     }
 }
