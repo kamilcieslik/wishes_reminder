@@ -99,10 +99,10 @@ public class MainController implements Initializable {
         if(checkBoxNewWishSentByEmail.isSelected()){
             Email email = new SimpleEmail();
             email.setSmtpPort(587);
-            email.setAuthenticator(new DefaultAuthenticator("wishesreminder@onet.pl",
+            email.setAuthenticator(new DefaultAuthenticator("pwr.wishesreminder@gmail.com",
                     "Mojehaslo123$"));
             email.setDebug(false);
-            email.setHostName("smtp.poczta.onet.pl");
+            email.setHostName("smtp.gmail.com");
             try {
                 email.setFrom("wishesreminder@onet.pl");
                 email.setSubject(textFieldNewWishEmailSubject.getText());
