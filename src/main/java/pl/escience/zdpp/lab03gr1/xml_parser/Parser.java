@@ -28,7 +28,7 @@ public class Parser {
             jaxbContext = JAXBContext.newInstance(WishTemplate.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            jaxbMarshaller.marshal(wishTemplate, new File("wish_template"+wishTemplate.getText().substring(0, Math.min(wishTemplate.getText().length(),  10))+".xml"));
+            jaxbMarshaller.marshal(wishTemplate, new File("wish_template_"+wishTemplate.getText().substring(0, Math.min(wishTemplate.getText().length(),  10))+".xml"));
         } catch (JAXBException e) {
             e.printStackTrace();
         }
