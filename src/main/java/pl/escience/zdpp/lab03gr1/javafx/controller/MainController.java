@@ -87,13 +87,7 @@ public class MainController implements Initializable {
         initRadioButtons();
         clearModesComponents();
         initUserData();
-
-
-        viewExtendedPersonAnniversaries = reminderService.getViewExtendedContactsByUserId(loggedUser.getId());
-        viewExtendedPersonAnniversaries.forEach(ViewExtendedPersonAnniversary::calculateNextAnniversaryFields);
-        initTableViews();
-        viewExtendedPersonAnniversaryObservableList.addAll(viewExtendedPersonAnniversaries);
-        tableViewPersonAnniversary.setItems(viewExtendedPersonAnniversaryObservableList);
+        fillEventsTable();
     }
 
     @FXML
@@ -411,6 +405,14 @@ public class MainController implements Initializable {
         tableColumnPersonAnniversaryNextAnniversaryDate.setCellFactory(col -> localDateFormat());
         tableColumnPersonAnniversaryNumberOfDays
                 .setCellValueFactory(new PropertyValueFactory<>("numberOfDaysToNextAnniversary"));
+    }
+
+    private void fillEventsTable() {
+        viewExtendedPersonAnniversaries = reminderService.getViewExtendedContactsByUserId(loggedUser.getId());
+        viewExtendedPersonAnniversaries.forEach(ViewExtendedPersonAnniversary::calculateNextAnniversaryFields);
+        initTableViews();
+        viewExtendedPersonAnniversaryObservableList.addAll(viewExtendedPersonAnniversaries);
+        tableViewPersonAnniversary.setItems(viewExtendedPersonAnniversaryObservableList);
     }
 
     private TableCell<ViewExtendedPersonAnniversary, Date> localDateFormat() {
