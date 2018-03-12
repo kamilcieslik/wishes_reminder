@@ -1,5 +1,6 @@
 package pl.escience.zdpp.lab03gr1.javafx.controller;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -9,7 +10,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import pl.escience.zdpp.lab03gr1.app.Main;
+import pl.escience.zdpp.lab03gr1.app.WishesReminder;
+import pl.escience.zdpp.lab03gr1.database.entity.Relation;
 import pl.escience.zdpp.lab03gr1.javafx.CustomMessageBox;
 import pl.escience.zdpp.lab03gr1.javafx.ListenerMethods;
 
@@ -20,13 +22,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class AddOrModifyPersonAnniversary implements Initializable {
+    private ObservableList<Relation> relationObservableList;
     private CustomMessageBox customMessageBox;
 
     @FXML
     private Label labelEnterPrimaryData, labelRelation, labelSurname, labelName, labelEmail, labelEnterAddress,
             labelStreet, labelPostalCode, labelCity, labelCountry, labelAnniversaryDate;
     @FXML
-    private ComboBox<?> comboBoxRelation;
+    private ComboBox<Relation> comboBoxRelation;
     @FXML
     private TextField textFieldName, textFieldSurname, textFieldEmail, textFieldStreet, textFieldPostalCode,
             textFieldCountry, textFieldCity;
@@ -58,6 +61,9 @@ public class AddOrModifyPersonAnniversary implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        relationObservableList = WishesReminder.getRelationObservableList();
+        comboBoxRelation.setItems(relationObservableList);
+
         customMessageBox = new CustomMessageBox("image/icon.png");
         initRadioButtons();
 
@@ -100,7 +106,7 @@ public class AddOrModifyPersonAnniversary implements Initializable {
                         textFieldCountry, labelCountry, "Podaj kraj.", "Niepoprawny format", 40,
                         "Przekroczono limit znaków"));
 
-        comboBoxRelation.getEditor().textProperty().addListener((observable, oldValue, newValue) -> listenerMethods
+        comboBoxRelation.valueProperty().addListener((observable, oldValue, newValue) -> listenerMethods
                 .changeLabelComboBox(comboBoxRelation, labelRelation,
                         "Wybierz relację."));
 
@@ -162,7 +168,7 @@ public class AddOrModifyPersonAnniversary implements Initializable {
             loader.load();
             Parent parent = loader.getRoot();
             Stage primaryStage = new Stage();
-            Main.setMainStage(primaryStage);
+            WishesReminder.setMainStage(primaryStage);
             primaryStage.setTitle("Wishes Reminder");
             primaryStage.getIcons().add(new Image("/image/icon.png"));
             primaryStage.setMinWidth(950);

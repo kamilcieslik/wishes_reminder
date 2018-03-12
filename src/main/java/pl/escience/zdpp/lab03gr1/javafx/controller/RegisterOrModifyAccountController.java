@@ -10,7 +10,11 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import pl.escience.zdpp.lab03gr1.app.Main;
+import pl.escience.zdpp.lab03gr1.app.WishesReminder;
+import pl.escience.zdpp.lab03gr1.database.entity.Address;
+import pl.escience.zdpp.lab03gr1.database.entity.User;
+import pl.escience.zdpp.lab03gr1.database.exception.UniqueViolationException;
+import pl.escience.zdpp.lab03gr1.database.service.ReminderService;
 import pl.escience.zdpp.lab03gr1.javafx.CustomMessageBox;
 import pl.escience.zdpp.lab03gr1.javafx.ListenerMethods;
 
@@ -21,8 +25,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RegisterOrModifyAccountController implements Initializable {
+    private ReminderService reminderService;
+    private User loggedUser;
     private CustomMessageBox customMessageBox;
-    // private User loggedUser;
 
     @FXML
     private Button buttonRegister;
@@ -38,6 +43,8 @@ public class RegisterOrModifyAccountController implements Initializable {
     private HBox hBoxSetCurrentData;
 
     public void initUserData() {
+        loggedUser = WishesReminder.getLoggedUser();
+
         buttonRegister.setText("Modyfikuj");
         labelEnterYourData.setText("Modyfikuj swoje dane");
         labelEnterYourPassword.setText("Modyfikuj hasło identyfikujące konto");
@@ -54,11 +61,13 @@ public class RegisterOrModifyAccountController implements Initializable {
         hBoxSetCurrentData.setMaxHeight(Control.USE_COMPUTED_SIZE);
         hBoxSetCurrentData.setMaxWidth(Control.USE_COMPUTED_SIZE);
 
-        //TODO: Wywołanie metody wypełniającej textFields i passwordFields danymi użytkownika.
+        fillComponentsByLoggedUserData();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        reminderService = WishesReminder.getReminderService();
+
         customMessageBox = new CustomMessageBox("image/icon.png");
 
         ListenerMethods listenerMethods = new ListenerMethods();
@@ -111,7 +120,6 @@ public class RegisterOrModifyAccountController implements Initializable {
                 changeConfirmPasswordFieldText());
     }
 
-
     @FXML
     void buttonRegister_onAction() {
         String name = labelName.getText();
@@ -130,14 +138,34 @@ public class RegisterOrModifyAccountController implements Initializable {
             if (name.isEmpty() && surname.isEmpty() && email.isEmpty() && street.isEmpty()
                     && postalCode.isEmpty() && city.isEmpty() && country.isEmpty() && login.isEmpty() && password.isEmpty()
                     && confirmedPassword.isEmpty()) {
-                // TODO: Utworzenie użytkownika wraz z adresem. Przejście do głównej sceny jako zalogowany użytkownik.
-                // TODO: Przejście do głównej sceny z wywołaniem metody initUserData(loggedUser).
+                try {
+                    User newUser = new User(textFieldLogin.getText(), passwordFieldPassword.getText(), textFieldName.getText(),
+                            textFieldSurname.getText(), textFieldEmail.getText());
+                    newUser.setAddress(new Address(textFieldStreet.getText(), textFieldCity.getText(),
+                            textFieldPostalCode.getText(), textFieldCountry.getText()));
+                    reminderService.saveUser(newUser);
+                    WishesReminder.setLoggedUser(newUser);
+                    GetOutOfTheScene(true);
+                } catch (UniqueViolationException e) {
+                    customMessageBox.showMessageBox(Alert.AlertType.WARNING, "Ostrzeżenie",
+                            "Operacja rejestracji nie powiodła się.",
+                            "Powód: " + e.getCause().getMessage() + ".").showAndWait();
+                }
             } else if (name.isEmpty() && surname.isEmpty() && email.isEmpty()
                     && street.equals("Podaj ulicę i nr domu/mieszkania.") && postalCode.equals("Podaj kod pocztowy.")
                     && city.equals("Podaj miasto.") && country.equals("Podaj kraj.") && login.isEmpty()
                     && password.isEmpty() && confirmedPassword.isEmpty()) {
-                // TODO: Utworzenie użytkownika bez adresu. Przejście do głównej sceny jako zalogowany użytkownik.
-                // TODO: Przejście do głównej sceny z wywołaniem metody initUserData(loggedUser).
+                try {
+                    User newUser = new User(textFieldLogin.getText(), passwordFieldPassword.getText(), textFieldName.getText(),
+                            textFieldSurname.getText(), textFieldEmail.getText());
+                    reminderService.saveUser(newUser);
+                    WishesReminder.setLoggedUser(newUser);
+                    GetOutOfTheScene(true);
+                } catch (UniqueViolationException e) {
+                    customMessageBox.showMessageBox(Alert.AlertType.WARNING, "Ostrzeżenie",
+                            "Operacja rejestracji nie powiodła się.",
+                            "Powód: " + e.getCause().getMessage() + ".").showAndWait();
+                }
             } else
                 customMessageBox.showMessageBox(Alert.AlertType.WARNING, "Ostrzeżenie",
                         "Operacja rejestracji nie powiedzie się.",
@@ -147,17 +175,51 @@ public class RegisterOrModifyAccountController implements Initializable {
             if (name.isEmpty() && surname.isEmpty() && email.isEmpty() && street.isEmpty()
                     && postalCode.isEmpty() && city.isEmpty() && country.isEmpty() && login.isEmpty() && password.isEmpty()
                     && confirmedPassword.isEmpty()) {
-                // TODO: Modyfikacja użytkownika z adresem. Sprawdzenie czy użytkownik posiada adres.
-                // TODO: Jeżeli tak to modyfikacja adresu, w przeciwnym razie utworzenie adresu użytkownika.
-                // TODO: Powrót do głównej sceny z wywołaniem metody initUserData(loggedUser).
+                try {
+                    loggedUser.setPassword(passwordFieldPassword.getText());
+                    loggedUser.setFirstName(textFieldName.getText());
+                    loggedUser.setLastName(textFieldSurname.getText());
+                    loggedUser.setEmail(textFieldEmail.getText());
+
+                    if (loggedUser.getAddress() != null) {
+                        loggedUser.getAddress().setStreet(textFieldStreet.getText());
+                        loggedUser.getAddress().setPostalCode(textFieldPostalCode.getText());
+                        loggedUser.getAddress().setCity(textFieldCity.getText());
+                        loggedUser.getAddress().setCountry(textFieldCountry.getText());
+                    } else {
+                        Address newAddress = new Address(textFieldStreet.getText(), textFieldCity.getText(),
+                                textFieldPostalCode.getText(), textFieldCountry.getText());
+                        loggedUser.setAddress(newAddress);
+                    }
+                    reminderService.saveUser(loggedUser);
+                    GetOutOfTheScene(true);
+                } catch (UniqueViolationException e) {
+                    customMessageBox.showMessageBox(Alert.AlertType.WARNING, "Ostrzeżenie",
+                            "Operacja modyfikacji nie powiodła się.",
+                            "Powód: " + e.getCause().getMessage() + ".").showAndWait();
+                }
             } else if (name.isEmpty() && surname.isEmpty() && email.isEmpty()
                     && street.equals("Podaj ulicę i nr domu/mieszkania.") && postalCode.equals("Podaj kod pocztowy.")
                     && city.equals("Podaj miasto.") && country.equals("Podaj kraj.") && login.isEmpty()
                     && password.isEmpty() && confirmedPassword.isEmpty()) {
-                System.out.println("Użytkownik bez adresu.");
-                // TODO: Modyfikacja użytkownika bez adresu. Sprawdzenie czy użytkownik posiada adres.
-                // TODO: Jeżeli tak to usunięcie adresu użytkownika.
-                // TODO: Powrót do głównej sceny z wywołaniem metody initUserData(loggedUser).
+                try {
+                    loggedUser.setPassword(passwordFieldPassword.getText());
+                    loggedUser.setFirstName(textFieldName.getText());
+                    loggedUser.setLastName(textFieldSurname.getText());
+                    loggedUser.setEmail(textFieldEmail.getText());
+
+                    if (loggedUser.getAddress() != null) {
+                        reminderService.deleteAddress(loggedUser.getAddress().getId());
+                        loggedUser.setAddress(null);
+                    }
+
+                    reminderService.saveUser(loggedUser);
+                    GetOutOfTheScene(true);
+                } catch (UniqueViolationException e) {
+                    customMessageBox.showMessageBox(Alert.AlertType.WARNING, "Ostrzeżenie",
+                            "Operacja modyfikacji nie powiodła się.",
+                            "Powód: " + e.getCause().getMessage() + ".").showAndWait();
+                }
             } else
                 customMessageBox.showMessageBox(Alert.AlertType.WARNING, "Ostrzeżenie",
                         "Operacja modyfikacji danych nie powiedzie się.",
@@ -168,56 +230,15 @@ public class RegisterOrModifyAccountController implements Initializable {
 
     @FXML
     void buttonCancel_onAction() {
-        if (buttonRegister.getText().equals("Zarejestruj")) {
-            FXMLLoader loader = new FXMLLoader();
-            try {
-                loader.setLocation(getClass().getClassLoader().getResource("fxml/login.fxml"));
-                loader.load();
-                Parent parent = loader.getRoot();
-                Stage primaryStage = new Stage();
-                Main.setMainStage(primaryStage);
-                primaryStage.initStyle(StageStyle.DECORATED);
-                primaryStage.resizableProperty().setValue(Boolean.FALSE);
-                primaryStage.setTitle("Wishes Reminder");
-                primaryStage.getIcons().add(new Image("/image/icon.png"));
-                primaryStage.setScene(new Scene(parent, 1184, 585));
-
-                Stage stage = (Stage) textFieldCity.getScene().getWindow();
-                stage.hide();
-                primaryStage.show();
-            } catch (IOException ioEcx) {
-                Logger.getLogger(WelcomeBannerController.class.getName()).log(Level.SEVERE, null, ioEcx);
-            }
-        } else {
-            FXMLLoader loader = new FXMLLoader();
-            try {
-                loader.setLocation(getClass().getClassLoader().getResource("fxml/main.fxml"));
-                loader.load();
-                Parent parent = loader.getRoot();
-                Stage primaryStage = new Stage();
-                Main.setMainStage(primaryStage);
-                primaryStage.setTitle("Wishes Reminder");
-                primaryStage.getIcons().add(new Image("/image/icon.png"));
-                primaryStage.setMinWidth(950);
-                primaryStage.setMinHeight(890);
-                primaryStage.setScene(new Scene(parent, 1601, 900));
-                Stage stage = (Stage) textFieldCity.getScene().getWindow();
-                stage.hide();
-                primaryStage.show();
-            } catch (IOException ioEcx) {
-                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ioEcx);
-            }
-        }
+        if (buttonRegister.getText().equals("Zarejestruj"))
+            GetOutOfTheScene(false);
+        else
+            GetOutOfTheScene(true);
     }
 
     @FXML
     void buttonSetCurrentData_onAction() {
-        // TODO: Wywołanie metody wypełniającej textFields i passwordFields danymi użytkownika.
-    }
-
-    private void fillFieldsByUserData() {
-        // textFieldName.setText(loggedUser.getFirstName);
-        // ...
+        fillComponentsByLoggedUserData();
     }
 
     @SuppressWarnings("Duplicates")
@@ -252,5 +273,71 @@ public class RegisterOrModifyAccountController implements Initializable {
             labelConfirmPassword.setText("");
         else
             labelConfirmPassword.setText("");
+    }
+
+    private void fillComponentsByLoggedUserData() {
+        textFieldLogin.setText(loggedUser.getLogin());
+        passwordFieldPassword.setText(loggedUser.getPassword());
+        passwordFieldConfirmPassword.setText(loggedUser.getPassword());
+
+        textFieldName.setText(loggedUser.getFirstName());
+        textFieldSurname.setText(loggedUser.getLastName());
+        textFieldEmail.setText(loggedUser.getEmail());
+
+        Address loggedUserAddress = loggedUser.getAddress();
+        if (loggedUserAddress != null) {
+            textFieldStreet.setText(loggedUserAddress.getStreet());
+            textFieldPostalCode.setText(loggedUserAddress.getPostalCode());
+            textFieldCity.setText(loggedUserAddress.getCity());
+            textFieldCountry.setText(loggedUserAddress.getCountry());
+        } else {
+            textFieldStreet.setText("");
+            textFieldPostalCode.setText("");
+            textFieldCity.setText("");
+            textFieldCountry.setText("");
+        }
+    }
+
+    private void GetOutOfTheScene(Boolean loadMainScene) {
+        if (!loadMainScene) {
+            FXMLLoader loader = new FXMLLoader();
+            try {
+                loader.setLocation(getClass().getClassLoader().getResource("fxml/login.fxml"));
+                loader.load();
+                Parent parent = loader.getRoot();
+                Stage primaryStage = new Stage();
+                WishesReminder.setMainStage(primaryStage);
+                primaryStage.initStyle(StageStyle.DECORATED);
+                primaryStage.resizableProperty().setValue(Boolean.FALSE);
+                primaryStage.setTitle("Wishes Reminder");
+                primaryStage.getIcons().add(new Image("/image/icon.png"));
+                primaryStage.setScene(new Scene(parent, 1184, 585));
+
+                Stage stage = (Stage) textFieldCity.getScene().getWindow();
+                stage.hide();
+                primaryStage.show();
+            } catch (IOException ioEcx) {
+                Logger.getLogger(WelcomeBannerController.class.getName()).log(Level.SEVERE, null, ioEcx);
+            }
+        } else {
+            FXMLLoader loader = new FXMLLoader();
+            try {
+                loader.setLocation(getClass().getClassLoader().getResource("fxml/main.fxml"));
+                loader.load();
+                Parent parent = loader.getRoot();
+                Stage primaryStage = new Stage();
+                WishesReminder.setMainStage(primaryStage);
+                primaryStage.setTitle("Wishes Reminder");
+                primaryStage.getIcons().add(new Image("/image/icon.png"));
+                primaryStage.setMinWidth(950);
+                primaryStage.setMinHeight(890);
+                primaryStage.setScene(new Scene(parent, 1601, 900));
+                Stage stage = (Stage) textFieldCity.getScene().getWindow();
+                stage.hide();
+                primaryStage.show();
+            } catch (IOException ioEcx) {
+                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ioEcx);
+            }
+        }
     }
 }

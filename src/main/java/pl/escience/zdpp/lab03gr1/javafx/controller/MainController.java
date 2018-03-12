@@ -1,28 +1,42 @@
 package pl.escience.zdpp.lab03gr1.javafx.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import pl.escience.zdpp.lab03gr1.app.Main;
+import pl.escience.zdpp.lab03gr1.app.WishesReminder;
+import pl.escience.zdpp.lab03gr1.database.entity.User;
+import pl.escience.zdpp.lab03gr1.database.service.ReminderService;
+import pl.escience.zdpp.lab03gr1.database.view.ViewExtendedPersonAnniversary;
 import pl.escience.zdpp.lab03gr1.javafx.CustomMessageBox;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class MainController implements Initializable {
+    private ReminderService reminderService;
+    private User loggedUser;
     private CustomMessageBox customMessageBox;
+
+    private List<ViewExtendedPersonAnniversary> viewExtendedPersonAnniversaries;
+    private ObservableList<ViewExtendedPersonAnniversary> viewExtendedPersonAnniversaryObservableList
+            = FXCollections.observableArrayList();
 
     @FXML
     private Label labelHeader, labelUserNameAndSurname, labelUserLogin, labelDetailsNameAndSurname,
@@ -32,13 +46,15 @@ public class MainController implements Initializable {
             labelSelectedAlreadySentWishKind, labelAlreadySentWishesNameAndSurname, labelSelectedAlreadySentWishSentBy,
             labelNewWishKind, labelNewWishNameAndSurname;
     @FXML
-    private TableView<?> tableViewPersonAnniversary;
+    private TableView<ViewExtendedPersonAnniversary> tableViewPersonAnniversary;
     @FXML
-    private TableColumn<?, String> tableColumnPersonAnniversaryName, tableColumnPersonAnniversarySurname,
-            tableColumnPersonAnniversaryRelation, tableColumnPersonAnniversaryAnniversaryKind,
-            tableColumnPersonAnniversaryAnniversaryDate;
+    private TableColumn<ViewExtendedPersonAnniversary, String> tableColumnPersonAnniversaryName,
+            tableColumnPersonAnniversarySurname, tableColumnPersonAnniversaryRelation,
+            tableColumnPersonAnniversaryAnniversaryKind;
     @FXML
-    private TableColumn<?, Integer> tableColumnPersonAnniversaryNumberOfDays;
+    private TableColumn<ViewExtendedPersonAnniversary, Date> tableColumnPersonAnniversaryNextAnniversaryDate;
+    @FXML
+    private TableColumn<ViewExtendedPersonAnniversary, Integer> tableColumnPersonAnniversaryNumberOfDays;
     @FXML
     private HBox hBoxModifyAnaDeleteSelectedPersonAnniversary;
     @FXML
@@ -62,17 +78,22 @@ public class MainController implements Initializable {
     @FXML
     private TextField textFieldNewWishEmailSubject;
 
-    public void initUserData() {
-        // TODO: Wypełnienie tablicy wydarzeń (personAnniversaries).
-        // TODO: bservableList.addAll(personAnniversariesExtendedView.getEntitiesByUserId(loggedUser.getId()));
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        reminderService = WishesReminder.getReminderService();
+        loggedUser = WishesReminder.getLoggedUser();
+
         customMessageBox = new CustomMessageBox("image/icon.png");
         initRadioButtons();
         clearModesComponents();
+        initUserData();
+
+
+        viewExtendedPersonAnniversaries = reminderService.getViewExtendedContactsByUserId(loggedUser.getId());
+        viewExtendedPersonAnniversaries.forEach(ViewExtendedPersonAnniversary::calculateNextAnniversaryFields);
         initTableViews();
+        viewExtendedPersonAnniversaryObservableList.addAll(viewExtendedPersonAnniversaries);
+        tableViewPersonAnniversary.setItems(viewExtendedPersonAnniversaryObservableList);
     }
 
     @FXML
@@ -90,7 +111,7 @@ public class MainController implements Initializable {
             loader.load();
             Parent parent = loader.getRoot();
             Stage primaryStage = new Stage();
-            Main.setMainStage(primaryStage);
+            WishesReminder.setMainStage(primaryStage);
             primaryStage.setTitle("Wishes Reminder");
             primaryStage.getIcons().add(new Image("/image/icon.png"));
             primaryStage.setMinWidth(1100);
@@ -120,7 +141,7 @@ public class MainController implements Initializable {
             controller.initPersonAnniversaryData();
             Parent parent = loader.getRoot();
             Stage primaryStage = new Stage();
-            Main.setMainStage(primaryStage);
+            WishesReminder.setMainStage(primaryStage);
             primaryStage.setTitle("Wishes Reminder");
             primaryStage.getIcons().add(new Image("/image/icon.png"));
             primaryStage.setMinWidth(1100);
@@ -144,7 +165,7 @@ public class MainController implements Initializable {
             controller.initUserData();
             Parent parent = loader.getRoot();
             Stage primaryStage = new Stage();
-            Main.setMainStage(primaryStage);
+            WishesReminder.setMainStage(primaryStage);
             primaryStage.setTitle("Wishes Reminder");
             primaryStage.getIcons().add(new Image("/image/icon.png"));
             primaryStage.setMinWidth(1100);
@@ -166,7 +187,7 @@ public class MainController implements Initializable {
             loader.load();
             Parent parent = loader.getRoot();
             Stage primaryStage = new Stage();
-            Main.setMainStage(primaryStage);
+            WishesReminder.setMainStage(primaryStage);
             primaryStage.setTitle("Wishes Reminder");
             primaryStage.getIcons().add(new Image("/image/icon.png"));
             primaryStage.setMinWidth(1100);
@@ -188,7 +209,7 @@ public class MainController implements Initializable {
             loader.load();
             Parent parent = loader.getRoot();
             Stage primaryStage = new Stage();
-            Main.setMainStage(primaryStage);
+            WishesReminder.setMainStage(primaryStage);
             primaryStage.initStyle(StageStyle.DECORATED);
             primaryStage.resizableProperty().setValue(Boolean.FALSE);
             primaryStage.setTitle("Wishes Reminder");
@@ -263,6 +284,14 @@ public class MainController implements Initializable {
 
         preparePersonAnniversaryModeComponents("new_wish");
         radioButtonNewWish.setSelected(true);
+    }
+
+    private void initUserData() {
+        labelUserLogin.setText(loggedUser.getLogin());
+        labelUserNameAndSurname.setText(loggedUser.getFirstName() + " " + loggedUser.getLastName());
+
+        // TODO: Wypełnienie tablicy wydarzeń (personAnniversaries).
+        // TODO: bservableList.addAll(personAnniversariesExtendedView.getEntitiesByUserId(loggedUser.getId()));
     }
 
     private void setVBoxVisible(VBox vBox, Boolean visible) {
@@ -372,6 +401,29 @@ public class MainController implements Initializable {
     }
 
     private void initTableViews() {
-        //TODO: Set tableViews properties.
+        tableColumnPersonAnniversaryName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        tableColumnPersonAnniversarySurname.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        tableColumnPersonAnniversaryRelation.setCellValueFactory(new PropertyValueFactory<>("relationName"));
+        tableColumnPersonAnniversaryAnniversaryKind.setCellValueFactory(new PropertyValueFactory<>("anniversaryKind"));
+
+        tableColumnPersonAnniversaryNextAnniversaryDate
+                .setCellValueFactory(new PropertyValueFactory<>("nextAnniversaryDate"));
+        tableColumnPersonAnniversaryNextAnniversaryDate.setCellFactory(col -> localDateFormat());
+        tableColumnPersonAnniversaryNumberOfDays
+                .setCellValueFactory(new PropertyValueFactory<>("numberOfDaysToNextAnniversary"));
+    }
+
+    private TableCell<ViewExtendedPersonAnniversary, Date> localDateFormat() {
+        return new TableCell<ViewExtendedPersonAnniversary, Date>() {
+            @Override
+            public void updateItem(Date date, boolean empty) {
+                super.updateItem(date, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(new SimpleDateFormat("dd-MM-yyyy").format(date));
+                }
+            }
+        };
     }
 }

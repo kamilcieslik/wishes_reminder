@@ -156,6 +156,14 @@ public class ViewExtendedPersonAnniversary {
         return numberOfSentWishes;
     }
 
+    public Integer getNumberOfDaysToNextAnniversary() {
+        return numberOfDaysToNextAnniversary;
+    }
+
+    public Date getNextAnniversaryDate() {
+        return nextAnniversaryDate;
+    }
+
     public void calculateNextAnniversaryFields() {
         Calendar anniversaryDate = Calendar.getInstance();
         anniversaryDate.setTime(this.anniversaryDate);
@@ -203,7 +211,8 @@ public class ViewExtendedPersonAnniversary {
                 ", relationId=" + relationId +
                 ", relationName='" + relationName + '\'' +
                 ", numberOfSentWishes=" + numberOfSentWishes +
-
+                ", numberOfDaysToNextAnniversary=" + numberOfDaysToNextAnniversary +
+                ", nextAnniversaryDate=" + nextAnniversaryDate +
                 '}';
     }
 }

@@ -10,8 +10,11 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import pl.escience.zdpp.lab03gr1.app.Main;
+import pl.escience.zdpp.lab03gr1.app.WishesReminder;
+import pl.escience.zdpp.lab03gr1.database.entity.User;
+import pl.escience.zdpp.lab03gr1.database.service.ReminderService;
 
+import javax.persistence.NoResultException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -19,6 +22,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LoginController implements Initializable {
+    private ReminderService reminderService;
+
     @FXML
     private TextField textFieldLogin;
     @FXML
@@ -28,30 +33,41 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        reminderService = WishesReminder.getReminderService();
     }
 
     @FXML
     void buttonLogin_onAction() {
-        //TODO: Login
-
-        FXMLLoader loader = new FXMLLoader();
-        try {
-            loader.setLocation(getClass().getClassLoader().getResource("fxml/main.fxml"));
-            loader.load();
-            Parent parent = loader.getRoot();
-            Stage primaryStage = new Stage();
-            Main.setMainStage(primaryStage);
-            primaryStage.setTitle("Wishes Reminder");
-            primaryStage.getIcons().add(new Image("/image/icon.png"));
-            primaryStage.setMinWidth(950);
-            primaryStage.setMinHeight(890);
-            primaryStage.setScene(new Scene(parent, 1600, 900));
-            Stage stage = (Stage) textFieldLogin.getScene().getWindow();
-            stage.hide();
-            primaryStage.show();
-        } catch (IOException ioEcx) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ioEcx);
+        if (textFieldLogin.getText().equals("") || passwordFieldPassword.getText().equals(""))
+            labelInvalidLoginOrPassword.setText("Nie podano danych logowania.");
+        else {
+            try {
+                User loggedUser = reminderService.getUserByLogin(textFieldLogin.getText());
+                if (loggedUser != null && loggedUser.getPassword().equals(passwordFieldPassword.getText())) {
+                    WishesReminder.setLoggedUser(loggedUser);
+                    FXMLLoader loader = new FXMLLoader();
+                    try {
+                        loader.setLocation(getClass().getClassLoader().getResource("fxml/main.fxml"));
+                        loader.load();
+                        Parent parent = loader.getRoot();
+                        Stage primaryStage = new Stage();
+                        WishesReminder.setMainStage(primaryStage);
+                        primaryStage.setTitle("Wishes Reminder");
+                        primaryStage.getIcons().add(new Image("/image/icon.png"));
+                        primaryStage.setMinWidth(950);
+                        primaryStage.setMinHeight(890);
+                        primaryStage.setScene(new Scene(parent, 1600, 900));
+                        Stage stage = (Stage) textFieldLogin.getScene().getWindow();
+                        stage.hide();
+                        primaryStage.show();
+                    } catch (IOException ioEcx) {
+                        Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ioEcx);
+                    }
+                } else
+                    labelInvalidLoginOrPassword.setText("Niepoprawne hasło.");
+            } catch (NoResultException e) {
+                labelInvalidLoginOrPassword.setText("Użytkownik nie istnieje.");
+            }
         }
     }
 
@@ -63,7 +79,7 @@ public class LoginController implements Initializable {
             loader.load();
             Parent parent = loader.getRoot();
             Stage primaryStage = new Stage();
-            Main.setMainStage(primaryStage);
+            WishesReminder.setMainStage(primaryStage);
             primaryStage.setTitle("Wishes Reminder");
             primaryStage.getIcons().add(new Image("/image/icon.png"));
             primaryStage.setMinWidth(1100);

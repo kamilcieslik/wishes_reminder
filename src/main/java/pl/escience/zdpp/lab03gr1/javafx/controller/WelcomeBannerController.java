@@ -10,7 +10,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import pl.escience.zdpp.lab03gr1.app.Main;
+import pl.escience.zdpp.lab03gr1.app.WishesReminder;
 
 import java.io.IOException;
 import java.net.URL;
@@ -55,7 +55,7 @@ public class WelcomeBannerController implements Initializable {
                     loader.load();
                     Parent parent = loader.getRoot();
                     Stage primaryStage = new Stage();
-                    Main.setMainStage(primaryStage);
+                    WishesReminder.setMainStage(primaryStage);
                     primaryStage.initStyle(StageStyle.DECORATED);
                     primaryStage.resizableProperty().setValue(Boolean.FALSE);
                     primaryStage.setTitle("Wishes Reminder");

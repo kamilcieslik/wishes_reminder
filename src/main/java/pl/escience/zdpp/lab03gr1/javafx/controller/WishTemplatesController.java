@@ -14,7 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import pl.escience.zdpp.lab03gr1.app.Main;
+import pl.escience.zdpp.lab03gr1.app.WishesReminder;
 import pl.escience.zdpp.lab03gr1.javafx.CustomMessageBox;
 
 import java.io.File;
@@ -60,7 +60,7 @@ public class WishTemplatesController implements Initializable {
             loader.load();
             Parent parent = loader.getRoot();
             Stage primaryStage = new Stage();
-            Main.setMainStage(primaryStage);
+            WishesReminder.setMainStage(primaryStage);
             primaryStage.setTitle("Wishes Reminder");
             primaryStage.getIcons().add(new Image("/image/icon.png"));
             primaryStage.setMinWidth(950);
@@ -85,7 +85,7 @@ public class WishTemplatesController implements Initializable {
         frontCoversFileChooser.setTitle("Wybór tekstu szablonu życzeń z pliku");
         frontCoversFileChooser.getExtensionFilters()
                 .add(new FileChooser.ExtensionFilter("Szablony życzeń", "*.xml"));
-        File file = frontCoversFileChooser.showOpenDialog(Main.getMainStage());
+        File file = frontCoversFileChooser.showOpenDialog(WishesReminder.getMainStage());
         if (file != null) {
             // TODO: Odczyt szablonu, utworzenie szablonu, dodanie do BD, dodanie do listy.
         }
@@ -96,7 +96,7 @@ public class WishTemplatesController implements Initializable {
         // if (tableViewSelectedRow != null) then
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("Wybór lokalizacji zapisu szablonu życzeń");
-        File directory = chooser.showDialog(Main.getMainStage());
+        File directory = chooser.showDialog(WishesReminder.getMainStage());
         if (directory != null) {
             // TODO:
         }

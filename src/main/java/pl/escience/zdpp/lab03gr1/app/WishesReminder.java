@@ -16,6 +16,7 @@ import org.hibernate.exception.GenericJDBCException;
 import pl.escience.zdpp.lab03gr1.database.entity.*;
 import pl.escience.zdpp.lab03gr1.database.service.ReminderService;
 import pl.escience.zdpp.lab03gr1.database.view.ViewExtendedPersonAnniversary;
+import pl.escience.zdpp.lab03gr1.javafx.controller.WelcomeBannerController;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,6 +65,32 @@ public class WishesReminder extends Application {
 
     public void start(Stage primaryStage) {
 
+        setupLog4J();
+        initSessionFactory();
+        reminderService = new ReminderService(sessionFactory);
+
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            WishesReminder.mainStage = primaryStage;
+            loader.setLocation(getClass().getClassLoader().getResource("fxml/welcome_banner.fxml"));
+            loader.load();
+            Parent root = loader.getRoot();
+            mainStage.setTitle("Wishes Reminder");
+            mainStage.getIcons().add(new Image("/image/icon.png"));
+            mainStage.initStyle(StageStyle.UNDECORATED);
+            mainStage.resizableProperty().setValue(Boolean.FALSE);
+            mainStage.setScene(new Scene(root, 819, 325));
+            WelcomeBannerController loaderController = loader.getController();
+            mainStage.addEventHandler(WindowEvent.WINDOW_SHOWN, window -> {
+                Thread windowShownListener = new Thread(loaderController::initMainScene);
+                windowShownListener.start();
+            });
+            relationObservableList.addAll(reminderService.getRalations());
+            mainStage.centerOnScreen();
+            mainStage.show();
+        } catch (IOException ioEcx) {
+            Logger.getLogger(WishesReminder.class.getName()).log(Level.SEVERE, null, ioEcx);
+        }
     }
 
     public void stop() {
