@@ -1,7 +1,13 @@
 package pl.escience.zdpp.lab03gr1.database.entity;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "wish_template")
 public class WishTemplate {
@@ -11,6 +17,7 @@ public class WishTemplate {
     private Integer id;
 
     @Column(name = "text")
+    @XmlAttribute(name = "text")
     private String text;
 
     @ManyToOne(cascade = {CascadeType.DETACH,
