@@ -14,6 +14,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.Email;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.SimpleEmail;
 import pl.escience.zdpp.lab03gr1.app.WishesReminder;
 import pl.escience.zdpp.lab03gr1.database.entity.User;
 import pl.escience.zdpp.lab03gr1.database.service.ReminderService;
@@ -92,6 +96,27 @@ public class MainController implements Initializable {
 
     @FXML
     void buttonSendNewWish_onAction() {
+        if(checkBoxNewWishSentByEmail.isSelected()){
+            Email email = new SimpleEmail();
+            email.setSmtpPort(587);
+            email.setAuthenticator(new DefaultAuthenticator("wishesreminder@onet.pl",
+                    "Mojehaslo123$"));
+            email.setDebug(false);
+            email.setHostName("smtp.poczta.onet.pl");
+            try {
+                email.setFrom("wishesreminder@onet.pl");
+                email.setSubject(textFieldNewWishEmailSubject.getText());
+                email.setMsg(textAreaNewWishText.getText());
+                email.addTo("patrykz8@o2.pl");
+                email.setStartTLSEnabled(true);
+                email.send();
+                System.out.println("SENT");
+            } catch (EmailException e) {
+                e.printStackTrace();
+            }
+
+        }
+
 
     }
 
