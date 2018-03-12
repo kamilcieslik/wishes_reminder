@@ -1,4 +1,4 @@
-# Przypominajka - "Best Wishes"
+# Przypominajka - "Wishes Reminder"
 
 Aplikacja desktopowa umożliwiająca przeglądanie/edytowanie dat urodzin oraz imienin.
 Program pozwala na edycję danych osobowych użytkownika, logowanie/rejestrację, dodawanie
