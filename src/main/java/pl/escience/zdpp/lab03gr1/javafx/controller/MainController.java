@@ -270,8 +270,7 @@ public class MainController implements Initializable {
         fillDetailsSentWishesComponents();
     }
 
-
-
+    
     private void initRadioButtons() {
         ToggleGroup toggleGroupGameModes = new ToggleGroup();
         radioButtonNewWish.setToggleGroup(toggleGroupGameModes);
@@ -285,9 +284,6 @@ public class MainController implements Initializable {
     private void initUserData() {
         labelUserLogin.setText(loggedUser.getLogin());
         labelUserNameAndSurname.setText(loggedUser.getFirstName() + " " + loggedUser.getLastName());
-
-        // TODO: Wypełnienie tablicy wydarzeń (personAnniversaries).
-        // TODO: bservableList.addAll(personAnniversariesExtendedView.getEntitiesByUserId(loggedUser.getId()));
     }
 
     private void initCheckBoxes(){
@@ -457,10 +453,6 @@ public class MainController implements Initializable {
         labelNewWishKind.setText(v.getAnniversaryKind());
         textAreaNewWishText.setText(wishTemplate.getText());
         textFieldNewWishEmailSubject.setText(v.getEmail());
-
-
-
-
     }
 
     private void fillAlreadySentWishesTable() {
@@ -536,6 +528,5 @@ public class MainController implements Initializable {
             }
         };
     }
-
 
 }
