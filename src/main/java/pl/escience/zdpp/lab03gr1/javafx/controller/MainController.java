@@ -22,9 +22,11 @@ import pl.escience.zdpp.lab03gr1.javafx.CustomMessageBox;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -242,11 +244,13 @@ public class MainController implements Initializable {
 
     @FXML
     void tableViewPersonAnniversary_onMouseClicked() {
-        // ExtendedPersonAnniversaryView extendedPersonAnniversaryView = tableViewPersonAnniversary.getSelectionModel()
-        // .getSelectedItem();
-        // if (extendedPersonAnniversaryView != null) {
-        // clearModesComponents();
-        // setHBoxVisible(hBoxModifyAnaDeleteSelectedPersonAnniversary, true);
+
+        fillDetailsModeComponents();
+//         ExtendedPersonAnniversaryView extendedPersonAnniversaryView = tableViewPersonAnniversary.getSelectionModel()
+//         .getSelectedItem();
+//         if (extendedPersonAnniversaryView != null) {
+//         clearModesComponents();
+//         setHBoxVisible(hBoxModifyAnaDeleteSelectedPersonAnniversary, true);
         // TODO: Uzupełnienie wszysktich labels i wypełnienie tableViews. Zablokować możliwość kliknięcia
         // TODO: checkBox'a sentByList w przypadku braku danych adresowych nadawcy lub odbiorcy.
         // }
@@ -413,6 +417,22 @@ public class MainController implements Initializable {
         initTableViews();
         viewExtendedPersonAnniversaryObservableList.addAll(viewExtendedPersonAnniversaries);
         tableViewPersonAnniversary.setItems(viewExtendedPersonAnniversaryObservableList);
+    }
+
+    private void fillDetailsModeComponents() {
+        ViewExtendedPersonAnniversary v = tableViewPersonAnniversary.getSelectionModel()
+                .getSelectedItem();
+        labelDetailsNameAndSurname.setText(v.getFirstName()+" "+v.getLastName());
+        labelDetailsRelation.setText(v.getRelationName());
+        labelDetailsAnniversaryKind.setText(v.getAnniversaryKind());
+        DateFormat df = new SimpleDateFormat("dd MMMM", new Locale("pl"));
+        labelDetailsAnniversaryDate.setText(String.valueOf(df.format(v.getNextAnniversaryDate())));
+        labelDetailsNumberOfSentWiches.setText(String.valueOf(v.getNumberOfSentWishes()));
+        labelDetailsEmail.setText(v.getEmail());
+        labelDetailsStreet.setText(v.getStreet());
+        labelDetailsPostalCode.setText(v.getPostalCode());
+        labelDetailsCity.setText(v.getCity());
+        labelDetailsCountry.setText(v.getCountry());
     }
 
     private TableCell<ViewExtendedPersonAnniversary, Date> localDateFormat() {
