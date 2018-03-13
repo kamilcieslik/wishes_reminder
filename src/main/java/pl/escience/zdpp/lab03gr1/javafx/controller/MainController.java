@@ -490,8 +490,9 @@ public class MainController implements Initializable {
         labelDetailsNameAndSurname.setText(v.getFirstName()+" "+v.getLastName());
         labelDetailsRelation.setText(v.getRelationName());
         labelDetailsAnniversaryKind.setText(v.getAnniversaryKind());
-        DateFormat df = new SimpleDateFormat("dd MMMM", new Locale("pl"));
-        labelDetailsAnniversaryDate.setText(String.valueOf(df.format(v.getNextAnniversaryDate())));
+        DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        labelDetailsAnniversaryDate.setText(String.valueOf(df.format(v.getNextAnniversaryDate()))+"  (ur. "
+        +String.valueOf(df.format(v.getAnniversaryDate()))+")");
         labelDetailsNumberOfSentWiches.setText(String.valueOf(v.getNumberOfSentWishes()));
         labelDetailsEmail.setText(v.getEmail());
         labelDetailsStreet.setText(v.getStreet());
