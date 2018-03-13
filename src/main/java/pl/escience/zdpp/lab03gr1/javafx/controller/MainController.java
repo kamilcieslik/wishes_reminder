@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import pl.escience.zdpp.lab03gr1.app.WishesReminder;
+import pl.escience.zdpp.lab03gr1.database.entity.SentWish;
 import pl.escience.zdpp.lab03gr1.database.entity.User;
 import pl.escience.zdpp.lab03gr1.database.service.ReminderService;
 import pl.escience.zdpp.lab03gr1.database.view.ViewExtendedPersonAnniversary;
@@ -39,6 +40,8 @@ public class MainController implements Initializable {
     private List<ViewExtendedPersonAnniversary> viewExtendedPersonAnniversaries;
     private ObservableList<ViewExtendedPersonAnniversary> viewExtendedPersonAnniversaryObservableList
             = FXCollections.observableArrayList();
+    private List<SentWish> sentWishes;
+    private ObservableList<SentWish> sentWishObservableList=FXCollections.observableArrayList();
 
     @FXML
     private Label labelHeader, labelUserNameAndSurname, labelUserLogin, labelDetailsNameAndSurname,
@@ -64,11 +67,11 @@ public class MainController implements Initializable {
     @FXML
     private VBox vBoxDetailsMode, vBoxAlreadySentWishesMode, vBoxNewWishMode, vBoxEmailSubject;
     @FXML
-    private TableView<?> tableViewAlreadySentWishes;
+    private TableView<SentWish> tableViewAlreadySentWishes;
     @FXML
-    private TableColumn<?, Date> tableColumnAlreadySentWishesPostDate;
+    private TableColumn<SentWish, Date> tableColumnAlreadySentWishesPostDate;
     @FXML
-    private TableColumn<?, String> tableColumnAlreadySentWishesText;
+    private TableColumn<SentWish, String> tableColumnAlreadySentWishesText;
     @FXML
     private TextArea textAreaSelectedAlreadySentWishText, textAreaNewWishText;
     @FXML
@@ -245,7 +248,9 @@ public class MainController implements Initializable {
     @FXML
     void tableViewPersonAnniversary_onMouseClicked() {
 
+        clearModesComponents();
         fillDetailsModeComponents();
+        fillAlreadySentWishesTable();
 //         ExtendedPersonAnniversaryView extendedPersonAnniversaryView = tableViewPersonAnniversary.getSelectionModel()
 //         .getSelectedItem();
 //         if (extendedPersonAnniversaryView != null) {
@@ -258,6 +263,7 @@ public class MainController implements Initializable {
 
     @FXML
     void tableViewNewWishWishTemplates_onMouseClicked() {
+//        Clear
         // WishTemplate wishTemplate = tableViewNewWishWishTemplates.getSelectionModel()
         // .getSelectedItem();
         // if (wishTemplate != null) {
@@ -267,12 +273,15 @@ public class MainController implements Initializable {
 
     @FXML
     void tableViewAlreadySentWishes_onMouseClicked() {
+        fillDetailsSentWishesComponents();
         // Wish wish = tableViewAlreadySentWishes.getSelectionModel()
         // .getSelectedItem();
         // if (wish != null) {
         // TODO: Wypełnienie odpowiednich labels i textArea informacjami o wybranym życzeniu.
         // }
     }
+
+
 
     private void initRadioButtons() {
         ToggleGroup toggleGroupGameModes = new ToggleGroup();
@@ -374,8 +383,7 @@ public class MainController implements Initializable {
         labelSelectedAlreadySentWishKind.setText("------");
         labelSelectedAlreadySentWishSentBy.setText("------");
         textAreaSelectedAlreadySentWishText.setText("");
-
-        //TODO: ObservableList alreadySentWishes.clear();
+        sentWishObservableList.clear();
     }
 
     private void clearNewWishModeComponents() {
@@ -419,6 +427,43 @@ public class MainController implements Initializable {
         tableViewPersonAnniversary.setItems(viewExtendedPersonAnniversaryObservableList);
     }
 
+    private void initTableOfSentWishes(){
+        tableColumnAlreadySentWishesPostDate.setCellValueFactory(new PropertyValueFactory<>("postDate"));
+        tableColumnAlreadySentWishesPostDate.setCellFactory(col->localSentWishDateFormat());
+        tableColumnAlreadySentWishesText.setCellValueFactory(new PropertyValueFactory<>("text"));
+
+    }
+
+    private void fillAlreadySentWishesTable() {
+        ViewExtendedPersonAnniversary v = tableViewPersonAnniversary.getSelectionModel()
+                .getSelectedItem();
+        sentWishes = reminderService.getSentWishes();
+        initTableOfSentWishes();
+        for (SentWish s:sentWishes){
+            if ((s.getPersonAnniversary().getId()==v.getPersonAnniversaryId()) && v.getUserId()==loggedUser.getId())
+                sentWishObservableList.add(s);
+        }
+        tableViewAlreadySentWishes.setItems(sentWishObservableList);
+        labelAlreadySentWishesNameAndSurname.setText(v.getFirstName()+" "+v.getLastName());
+    }
+
+    private void fillDetailsSentWishesComponents() {
+        ViewExtendedPersonAnniversary v = tableViewPersonAnniversary.getSelectionModel()
+                .getSelectedItem();
+        SentWish sentWish = tableViewAlreadySentWishes.getSelectionModel().getSelectedItem();
+        labelSelectedAlreadySentWishKind.setText(v.getAnniversaryKind());
+        if(sentWish.getSentByEmail()){
+            labelSelectedAlreadySentWishSentBy.setText("e-mail");
+            if(sentWish.getSentByLetter()){
+                labelSelectedAlreadySentWishSentBy.setText(labelSelectedAlreadySentWishSentBy.getText()+" oraz list");
+            }
+        }
+        else
+            labelSelectedAlreadySentWishSentBy.setText("list");
+        textAreaSelectedAlreadySentWishText.setText(sentWish.getText());
+
+    }
+
     private void fillDetailsModeComponents() {
         ViewExtendedPersonAnniversary v = tableViewPersonAnniversary.getSelectionModel()
                 .getSelectedItem();
@@ -448,4 +493,20 @@ public class MainController implements Initializable {
             }
         };
     }
+
+    private TableCell<SentWish, Date> localSentWishDateFormat() {
+        return new TableCell<SentWish, Date>() {
+            @Override
+            public void updateItem(Date date, boolean empty) {
+                super.updateItem(date, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(new SimpleDateFormat("dd-MM-yyyy").format(date));
+                }
+            }
+        };
+    }
+
+
 }
