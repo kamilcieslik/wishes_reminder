@@ -21,11 +21,7 @@ import org.apache.commons.mail.SimpleEmail;
 import pl.escience.zdpp.lab03gr1.app.WishesReminder;
 import pl.escience.zdpp.lab03gr1.database.entity.SentWish;
 import pl.escience.zdpp.lab03gr1.database.entity.User;
-<<<<<<< HEAD
-import pl.escience.zdpp.lab03gr1.database.exception.UniqueViolationException;
-=======
 import pl.escience.zdpp.lab03gr1.database.entity.WishTemplate;
->>>>>>> 4e5f4d41cbba8a702267ae693fc3ebb9a059483f
 import pl.escience.zdpp.lab03gr1.database.service.ReminderService;
 import pl.escience.zdpp.lab03gr1.database.view.ViewExtendedPersonAnniversary;
 import pl.escience.zdpp.lab03gr1.javafx.CustomMessageBox;
