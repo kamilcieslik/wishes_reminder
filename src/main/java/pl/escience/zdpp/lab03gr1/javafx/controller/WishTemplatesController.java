@@ -1,5 +1,7 @@
 package pl.escience.zdpp.lab03gr1.javafx.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,7 +17,9 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import pl.escience.zdpp.lab03gr1.app.WishesReminder;
+import pl.escience.zdpp.lab03gr1.database.entity.WishTemplate;
 import pl.escience.zdpp.lab03gr1.javafx.CustomMessageBox;
+import pl.escience.zdpp.lab03gr1.xml_parser.Parser;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,13 +30,15 @@ import java.util.logging.Logger;
 
 public class WishTemplatesController implements Initializable {
     private CustomMessageBox customMessageBox;
+    private WishTemplate wishTemplate;
+    private ObservableList<WishTemplate> wishTemplateObservableList= FXCollections.observableArrayList();
 
     @FXML
     private Label labelHeader, labelNumberOfWishTemplates;
     @FXML
-    private TableView<?> tableViewWishTemplates;
+    private TableView<WishTemplate> tableViewWishTemplates;
     @FXML
-    private TableColumn<?, ?> tableColumnWishTemplatesText;
+    private TableColumn<WishTemplate, String> tableColumnWishTemplatesText;
     @FXML
     private VBox vBoxNewWishMode;
     @FXML
@@ -81,25 +87,36 @@ public class WishTemplatesController implements Initializable {
 
     @FXML
     void buttonReadFromFile_onAction() {
+        String xmlPath;
         FileChooser frontCoversFileChooser = new FileChooser();
         frontCoversFileChooser.setTitle("Wybór tekstu szablonu życzeń z pliku");
         frontCoversFileChooser.getExtensionFilters()
                 .add(new FileChooser.ExtensionFilter("Szablony życzeń", "*.xml"));
         File file = frontCoversFileChooser.showOpenDialog(WishesReminder.getMainStage());
         if (file != null) {
-            // TODO: Odczyt szablonu, utworzenie szablonu, dodanie do BD, dodanie do listy.
+            xmlPath = file.toString();
+            Parser parser = new Parser();
+            wishTemplate = parser.readFromXMLFile(xmlPath);
+            wishTemplateObservableList.add(wishTemplate);
         }
     }
 
     @FXML
     void buttonWriteToFile_onAction() {
-        // if (tableViewSelectedRow != null) then
-        DirectoryChooser chooser = new DirectoryChooser();
-        chooser.setTitle("Wybór lokalizacji zapisu szablonu życzeń");
-        File directory = chooser.showDialog(WishesReminder.getMainStage());
-        if (directory != null) {
-            // TODO:
+        if (tableViewWishTemplates.getSelectionModel().getSelectedItem() != null){
+            DirectoryChooser chooser = new DirectoryChooser();
+            chooser.setTitle("Wybór lokalizacji zapisu szablonu życzeń");
+            File directory = chooser.showDialog(WishesReminder.getMainStage());
+            if (directory != null) {
+                Parser parser = new Parser();
+                WishTemplate wishTemplate = tableViewWishTemplates.getSelectionModel().getSelectedItem();
+                parser.saveToXMLFile(wishTemplate);
+            }
         }
+        else{
+
+        }
+
     }
 
     @FXML
