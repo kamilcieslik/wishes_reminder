@@ -107,7 +107,6 @@ public class MainController implements Initializable {
 
     @FXML
     void buttonAddPersonAnniversary_onAction() {
-        // TODO:
 
         FXMLLoader loader = new FXMLLoader();
         try {
@@ -270,7 +269,7 @@ public class MainController implements Initializable {
         fillDetailsSentWishesComponents();
     }
 
-    
+
     private void initRadioButtons() {
         ToggleGroup toggleGroupGameModes = new ToggleGroup();
         radioButtonNewWish.setToggleGroup(toggleGroupGameModes);
