@@ -48,16 +48,12 @@ public class MainController implements Initializable {
     private CustomMessageBox customMessageBox;
 
     private List<ViewExtendedPersonAnniversary> viewExtendedPersonAnniversaries;
-<<<<<<< HEAD
-    private ObservableList<ViewExtendedPersonAnniversary> viewExtendedPersonAnniversaryObservableList = FXCollections.observableArrayList();
-=======
     private ObservableList<ViewExtendedPersonAnniversary> viewExtendedPersonAnniversaryObservableList
             = FXCollections.observableArrayList();
     private List<SentWish> sentWishes;
     private ObservableList<SentWish> sentWishObservableList=FXCollections.observableArrayList();
     private List<WishTemplate> wishTemplates;
     private ObservableList<WishTemplate> wishTemplateObservableList=FXCollections.observableArrayList();
->>>>>>> 4e5f4d41cbba8a702267ae693fc3ebb9a059483f
 
     @FXML
     private Label labelHeader, labelUserNameAndSurname, labelUserLogin, labelDetailsNameAndSurname, labelDetailsRelation, labelDetailsAnniversaryKind, labelDetailsAnniversaryDate, labelDetailsPriceWithCurrency, labelDetailsNumberOfSentWiches, labelDetailsEmail, labelDetailsStreet, labelDetailsPostalCode, labelDetailsCity, labelDetailsCountry, labelSelectedAlreadySentWishKind, labelAlreadySentWishesNameAndSurname, labelSelectedAlreadySentWishSentBy, labelNewWishKind, labelNewWishNameAndSurname;
