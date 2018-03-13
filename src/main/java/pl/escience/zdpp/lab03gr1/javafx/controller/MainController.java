@@ -19,7 +19,9 @@ import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 import pl.escience.zdpp.lab03gr1.app.WishesReminder;
+import pl.escience.zdpp.lab03gr1.database.entity.SentWish;
 import pl.escience.zdpp.lab03gr1.database.entity.User;
+import pl.escience.zdpp.lab03gr1.database.exception.UniqueViolationException;
 import pl.escience.zdpp.lab03gr1.database.service.ReminderService;
 import pl.escience.zdpp.lab03gr1.database.view.ViewExtendedPersonAnniversary;
 import pl.escience.zdpp.lab03gr1.javafx.CustomMessageBox;
@@ -39,22 +41,14 @@ public class MainController implements Initializable {
     private CustomMessageBox customMessageBox;
 
     private List<ViewExtendedPersonAnniversary> viewExtendedPersonAnniversaries;
-    private ObservableList<ViewExtendedPersonAnniversary> viewExtendedPersonAnniversaryObservableList
-            = FXCollections.observableArrayList();
+    private ObservableList<ViewExtendedPersonAnniversary> viewExtendedPersonAnniversaryObservableList = FXCollections.observableArrayList();
 
     @FXML
-    private Label labelHeader, labelUserNameAndSurname, labelUserLogin, labelDetailsNameAndSurname,
-            labelDetailsRelation, labelDetailsAnniversaryKind, labelDetailsAnniversaryDate,
-            labelDetailsPriceWithCurrency, labelDetailsNumberOfSentWiches, labelDetailsEmail,
-            labelDetailsStreet, labelDetailsPostalCode, labelDetailsCity, labelDetailsCountry,
-            labelSelectedAlreadySentWishKind, labelAlreadySentWishesNameAndSurname, labelSelectedAlreadySentWishSentBy,
-            labelNewWishKind, labelNewWishNameAndSurname;
+    private Label labelHeader, labelUserNameAndSurname, labelUserLogin, labelDetailsNameAndSurname, labelDetailsRelation, labelDetailsAnniversaryKind, labelDetailsAnniversaryDate, labelDetailsPriceWithCurrency, labelDetailsNumberOfSentWiches, labelDetailsEmail, labelDetailsStreet, labelDetailsPostalCode, labelDetailsCity, labelDetailsCountry, labelSelectedAlreadySentWishKind, labelAlreadySentWishesNameAndSurname, labelSelectedAlreadySentWishSentBy, labelNewWishKind, labelNewWishNameAndSurname;
     @FXML
     private TableView<ViewExtendedPersonAnniversary> tableViewPersonAnniversary;
     @FXML
-    private TableColumn<ViewExtendedPersonAnniversary, String> tableColumnPersonAnniversaryName,
-            tableColumnPersonAnniversarySurname, tableColumnPersonAnniversaryRelation,
-            tableColumnPersonAnniversaryAnniversaryKind;
+    private TableColumn<ViewExtendedPersonAnniversary, String> tableColumnPersonAnniversaryName, tableColumnPersonAnniversarySurname, tableColumnPersonAnniversaryRelation, tableColumnPersonAnniversaryAnniversaryKind;
     @FXML
     private TableColumn<ViewExtendedPersonAnniversary, Date> tableColumnPersonAnniversaryNextAnniversaryDate;
     @FXML
@@ -96,26 +90,55 @@ public class MainController implements Initializable {
 
     @FXML
     void buttonSendNewWish_onAction() {
-        if(checkBoxNewWishSentByEmail.isSelected()){
-            Email email = new SimpleEmail();
-            email.setSmtpPort(587);
-            email.setAuthenticator(new DefaultAuthenticator("pwr.wishesreminder@gmail.com",
-                    "Mojehaslo123$"));
-            email.setDebug(false);
-            email.setHostName("smtp.gmail.com");
-            try {
-                email.setFrom("wishesreminder@onet.pl");
-                email.setSubject(textFieldNewWishEmailSubject.getText());
-                email.setMsg(textAreaNewWishText.getText());
-                email.addTo("patrykz8@o2.pl");
-                email.setStartTLSEnabled(true);
-                email.send();
-                System.out.println("SENT");
-            } catch (EmailException e) {
-                e.printStackTrace();
-            }
+        if (tableViewPersonAnniversary.getSelectionModel().getSelectedItem() != null) {
+            if (checkBoxNewWishSentByList.isSelected() || checkBoxNewWishSentByEmail.isSelected()) {
+                if (!textAreaNewWishText.getText().equals("")){
+                    if (checkBoxNewWishSentByEmail.isSelected()){
+                        Email email = new SimpleEmail();
+                        email.setSmtpPort(587);
+                        email.setAuthenticator(new DefaultAuthenticator("pwr.wishesreminder@gmail.com", "Mojehaslo123$"));
+                        email.setDebug(false);
+                        email.setHostName("smtp.gmail.com");
+                        try {
+                            email.setFrom("pwr.wishesreminder@gmail.com");
+                            email.setSubject(textFieldNewWishEmailSubject.getText());
+                            email.setMsg(textAreaNewWishText.getText()+"\n"+"\n"+"\n"+"Email został" +
+                                    " wysłany przy pomocy aplikacji Wishes Reminder przez:"+"\n"+loggedUser.getFirstName()
+                                    +" "+loggedUser.getLastName()+
+                            "\n"+"Adres e-mail: "+ loggedUser.getEmail());
+                            email.addTo("patrykz13@gmail.com");
+                            email.setStartTLSEnabled(true);
+                            email.send();
+                        } catch (EmailException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    SentWish sentWish = new SentWish(textAreaNewWishText.getText(), new Date(),checkBoxNewWishSentByList.isSelected(),
+                            checkBoxNewWishSentByEmail.isSelected());
+                    sentWish.setPersonAnniversary(reminderService.getPersonAnniversary(tableViewPersonAnniversary.getSelectionModel().getSelectedItem().getPersonAnniversaryId()));
+                    reminderService.saveSentWish(sentWish);
+                    customMessageBox.showMessageBox(Alert.AlertType.CONFIRMATION, "Powodzenie",
+                            "Operacja wysłania życzeń  powiedzła się.",
+                            "Rekord został zaktualizowany").showAndWait();
 
-        }
+
+                }
+                else
+                    customMessageBox.showMessageBox(Alert.AlertType.WARNING, "Ostrzeżenie",
+                            "Operacja wysłania życzeń nie powiedzie się.",
+                            "Powód: nie można wysłać pustych życzeń.").showAndWait();
+            } else
+                customMessageBox.showMessageBox(Alert.AlertType.WARNING, "Ostrzeżenie",
+                        "Operacja wysłania życzeń nie powiedzie się.",
+                        "Powód: nie wybrano sposobu nadania.").showAndWait();
+        } else
+            customMessageBox.showMessageBox(Alert.AlertType.WARNING, "Ostrzeżenie",
+                    "Operacja wysłania życzeń nie powiedzie się.",
+                    "Powód: nie zaznaczono wydarzenia.").showAndWait();
+
+
+
+
 
 
     }
@@ -259,10 +282,8 @@ public class MainController implements Initializable {
 
     @FXML
     void checkBoxNewWishSentByEmail_onAction() {
-        if (checkBoxNewWishSentByEmail.isSelected())
-            setVBoxVisible(vBoxEmailSubject, true);
-        else
-            setVBoxVisible(vBoxEmailSubject, false);
+        if (checkBoxNewWishSentByEmail.isSelected()) setVBoxVisible(vBoxEmailSubject, true);
+        else setVBoxVisible(vBoxEmailSubject, false);
     }
 
     @FXML
@@ -425,11 +446,9 @@ public class MainController implements Initializable {
         tableColumnPersonAnniversaryRelation.setCellValueFactory(new PropertyValueFactory<>("relationName"));
         tableColumnPersonAnniversaryAnniversaryKind.setCellValueFactory(new PropertyValueFactory<>("anniversaryKind"));
 
-        tableColumnPersonAnniversaryNextAnniversaryDate
-                .setCellValueFactory(new PropertyValueFactory<>("nextAnniversaryDate"));
+        tableColumnPersonAnniversaryNextAnniversaryDate.setCellValueFactory(new PropertyValueFactory<>("nextAnniversaryDate"));
         tableColumnPersonAnniversaryNextAnniversaryDate.setCellFactory(col -> localDateFormat());
-        tableColumnPersonAnniversaryNumberOfDays
-                .setCellValueFactory(new PropertyValueFactory<>("numberOfDaysToNextAnniversary"));
+        tableColumnPersonAnniversaryNumberOfDays.setCellValueFactory(new PropertyValueFactory<>("numberOfDaysToNextAnniversary"));
     }
 
     private void fillEventsTable() {

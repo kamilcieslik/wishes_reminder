@@ -33,15 +33,14 @@ public class Test {
         }
         */
 
-        final String username = "wishesreminder@onet.pl";
+        final String username = "wishreminder@wp.pl";
         final String password = "Mojehaslo123$";
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", "outlook.office365.com");
-       // props.put("mail.smtp.port", "587");
-        props.put("smtp.poczta.onet.pl", "465");
+        props.put("mail.smtp.host", "smtp.wp.pl");
+        props.put("mail.smtp.port", "465");
 
 
         Session session = Session.getInstance(props,
@@ -54,7 +53,7 @@ public class Test {
         try {
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("wishesreminder@onet.pl"));
+            message.setFrom(new InternetAddress("wishreminder@wp.pl"));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse("patrykz8@o2.pl"));
             message.setSubject("Test");
