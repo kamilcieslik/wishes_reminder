@@ -118,7 +118,7 @@ public class MainController implements Initializable {
                     sentWish.setPersonAnniversary(reminderService.getPersonAnniversary(tableViewPersonAnniversary.getSelectionModel().getSelectedItem().getPersonAnniversaryId()));
                     reminderService.saveSentWish(sentWish);
                     customMessageBox.showMessageBox(Alert.AlertType.CONFIRMATION, "Powodzenie",
-                            "Operacja wysłania życzeń  powiedzła się.",
+                            "Operacja wysłania życzeń  powiodła się.",
                             "Rekord został zaktualizowany").showAndWait();
 
 
