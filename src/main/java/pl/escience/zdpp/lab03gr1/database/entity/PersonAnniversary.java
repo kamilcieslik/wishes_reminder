@@ -1,5 +1,8 @@
 package pl.escience.zdpp.lab03gr1.database.entity;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,7 +49,8 @@ public class PersonAnniversary {
     @JoinColumn(name = "relation_id")
     private Relation relation;
 
-    @OneToMany(mappedBy = "personAnniversary", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "personAnniversary", cascade = CascadeType.ALL)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<SentWish> sentWishes;
 
     public PersonAnniversary() {

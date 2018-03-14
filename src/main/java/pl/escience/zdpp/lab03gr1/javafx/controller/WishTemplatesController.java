@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
-import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -31,7 +30,6 @@ import java.util.logging.Logger;
 
 public class WishTemplatesController implements Initializable {
     private CustomMessageBox customMessageBox;
-    private WishTemplate wishTemplate;
     private User loggedUser;
     private ReminderService reminderService;
     private ObservableList<WishTemplate> wishTemplateObservableList = FXCollections.observableArrayList();
@@ -72,7 +70,6 @@ public class WishTemplatesController implements Initializable {
                     "Operacja dodania szablonu życzeń nie powiodłą się.",
                     "Powód: nie uzupełniono treści życzenia.").showAndWait();
         }
-
     }
 
     @FXML
@@ -124,7 +121,7 @@ public class WishTemplatesController implements Initializable {
         if (file != null) {
             xmlPath = file.toString();
             Parser parser = new Parser();
-            wishTemplate = parser.readFromXMLFile(xmlPath);
+            WishTemplate wishTemplate = parser.readFromXMLFile(xmlPath);
             textAreaNewWishText.setText(wishTemplate.getText());
         }
     }
@@ -145,7 +142,6 @@ public class WishTemplatesController implements Initializable {
                     "Operacja zapisu do pliku nie powiodła się.",
                     "Powód: nie zaznaczono szablonu życzeń.").showAndWait();
         }
-
     }
 
     @FXML
