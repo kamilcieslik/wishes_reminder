@@ -1,10 +1,9 @@
 package pl.escience.zdpp.lab03gr1.database.entity;
 
+import pl.escience.zdpp.lab03gr1.xml_parser.Parser;
+
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -14,6 +13,7 @@ public class WishTemplate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @XmlTransient
     private Integer id;
 
     @Column(name = "text")
@@ -25,6 +25,7 @@ public class WishTemplate {
             CascadeType.PERSIST,
             CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
+    @XmlTransient
     private User user;
 
     public WishTemplate() {
@@ -66,3 +67,5 @@ public class WishTemplate {
                 '}';
     }
 }
+
+

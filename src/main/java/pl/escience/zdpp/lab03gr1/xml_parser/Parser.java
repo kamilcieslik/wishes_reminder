@@ -21,13 +21,14 @@ public class Parser {
         return null;
     }
 
-    public void saveToXMLFile(WishTemplate wishTemplate) {
+    public void saveToXMLFile(WishTemplate wishTemplate,String directory) {
         JAXBContext jaxbContext;
         try {
+
             jaxbContext = JAXBContext.newInstance(WishTemplate.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            jaxbMarshaller.marshal(wishTemplate, new File("wish_template_" + wishTemplate.getText()
+            jaxbMarshaller.marshal(wishTemplate, new File(directory,"wish_template_" + wishTemplate.getText()
                     .substring(0, Math.min(wishTemplate.getText().length(), 10)) + ".xml"));
         } catch (JAXBException e) {
             e.printStackTrace();

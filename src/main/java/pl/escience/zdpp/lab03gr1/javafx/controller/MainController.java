@@ -31,10 +31,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -503,7 +500,7 @@ public class MainController implements Initializable {
         sentWishes = reminderService.getSentWishes();
         initTableOfSentWishes();
         for (SentWish s:sentWishes){
-            if ((s.getPersonAnniversary().getId()==v.getPersonAnniversaryId()) && v.getUserId()==loggedUser.getId())
+            if ((Objects.equals(s.getPersonAnniversary().getId(), v.getPersonAnniversaryId())) && Objects.equals(v.getUserId(), loggedUser.getId()))
                 sentWishObservableList.add(s);
         }
         tableViewAlreadySentWishes.setItems(sentWishObservableList);

@@ -31,7 +31,7 @@ public class User {
     @JoinColumn(name = "address_id")
     private Address address;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,  fetch = FetchType.EAGER)
     private List<WishTemplate> wishTemplates;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
