@@ -92,6 +92,7 @@ public class MainController implements Initializable {
         clearModesComponents();
         initUserData();
         fillEventsTable();
+        fillNewWishTemplatesTable();
     }
 
     @FXML
@@ -303,6 +304,10 @@ public class MainController implements Initializable {
 
     @FXML
     void tableViewNewWishWishTemplates_onMouseClicked() {
+        ViewExtendedPersonAnniversary v = tableViewPersonAnniversary.getSelectionModel()
+                .getSelectedItem();
+        if (v==null)
+            return;
         fillDetailsNewWishTemplatesComponents();
     }
 
