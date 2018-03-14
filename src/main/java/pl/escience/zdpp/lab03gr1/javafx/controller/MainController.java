@@ -119,8 +119,7 @@ public class MainController implements Initializable {
                             email.setSubject(textFieldNewWishEmailSubject.getText());
                             email.setMsg(textAreaNewWishText.getText() + "\n" + "\n" + "\n" + "Email został" +
                                     " wysłany przy pomocy aplikacji Wishes Reminder przez:\n" + loggedUser.getFirstName()
-                                    + " " + loggedUser.getLastName() +
-                                    "\n" + "Adres e-mail: " + loggedUser.getEmail());
+                                    + " " + loggedUser.getLastName() + ", e-mail: " + loggedUser.getEmail());
                             email.addTo(selectedExtendedPersonAnniversary.getEmail());
                             email.setStartTLSEnabled(true);
                             email.send();
@@ -130,10 +129,17 @@ public class MainController implements Initializable {
                                     "Powód: " + e.getMessage()).showAndWait();
                         }
                     }
-                    SentWish sentWish = new SentWish(textAreaNewWishText.getText(), new Date(), checkBoxNewWishSentByList.isSelected(),
+                    SentWish newWish = new SentWish(textAreaNewWishText.getText(), new Date(), checkBoxNewWishSentByList.isSelected(),
                             checkBoxNewWishSentByEmail.isSelected());
-                    sentWish.setPersonAnniversary(reminderService
+                    newWish.setPersonAnniversary(reminderService
                             .getPersonAnniversary(selectedExtendedPersonAnniversary.getPersonAnniversaryId()));
+                    reminderService.saveSentWish(newWish);
+                    sentWishObservableList.add(newWish);
+                    checkBoxNewWishSentByEmail.setSelected(false);
+                    checkBoxNewWishSentByList.setSelected(false);
+                    textFieldNewWishEmailSubject.setText("");
+                    textAreaNewWishText.setText("");
+                    setVBoxVisible(vBoxEmailSubject, false);
                     customMessageBox.showMessageBox(Alert.AlertType.CONFIRMATION, "Powodzenie",
                             "Operacja wysłania życzeń powiodła się.",
                             "Rekord został zaktualizowany").showAndWait();
