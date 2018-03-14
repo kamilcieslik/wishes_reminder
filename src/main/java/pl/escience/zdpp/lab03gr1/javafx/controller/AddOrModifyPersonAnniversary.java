@@ -11,7 +11,9 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import pl.escience.zdpp.lab03gr1.app.WishesReminder;
+import pl.escience.zdpp.lab03gr1.database.entity.PersonAnniversary;
 import pl.escience.zdpp.lab03gr1.database.entity.Relation;
+import pl.escience.zdpp.lab03gr1.database.entity.User;
 import pl.escience.zdpp.lab03gr1.javafx.CustomMessageBox;
 import pl.escience.zdpp.lab03gr1.javafx.ListenerMethods;
 
@@ -24,7 +26,7 @@ import java.util.logging.Logger;
 public class AddOrModifyPersonAnniversary implements Initializable {
     private ObservableList<Relation> relationObservableList;
     private CustomMessageBox customMessageBox;
-
+    private PersonAnniversary personanniversary;
     @FXML
     private Label labelEnterPrimaryData, labelRelation, labelSurname, labelName, labelEmail, labelEnterAddress,
             labelStreet, labelPostalCode, labelCity, labelCountry, labelAnniversaryDate;
@@ -43,6 +45,8 @@ public class AddOrModifyPersonAnniversary implements Initializable {
     private DatePicker datePickerAnniversaryDate;
 
     public void initPersonAnniversaryData() {
+    	//personanniversary = 
+    	System.out.println(MainController.getPersonAnniversary());
         buttonAdd.setText("Modyfikuj");
         labelEnterPrimaryData.setText("Modyfikuj podstawowe dane wydarzenia");
         labelEnterAddress.setText("Modyfikuj dane adresowe osoby, której dotyczy wydarzenie (opcjonalne)");
@@ -56,6 +60,7 @@ public class AddOrModifyPersonAnniversary implements Initializable {
         hBoxSetCurrentData.setMaxHeight(Control.USE_COMPUTED_SIZE);
         hBoxSetCurrentData.setMaxWidth(Control.USE_COMPUTED_SIZE);
 
+        fillComponentsByData();
         //TODO: Wywołanie metody wypełniającej textFields i passwordFields danymi wydarzenia.
     }
 
@@ -160,6 +165,24 @@ public class AddOrModifyPersonAnniversary implements Initializable {
         }
     }
 
+    
+    private void fillComponentsByData() {
+    	//comboBoxRelation.getSelectionModel().getSelectedItem().setRalationName(MainController.getPersonAnniversary().getRelationName());
+    	
+    	//datePickerAnniversaryDate.set
+    	textFieldName.setText(MainController.getPersonAnniversary().getRelationName());
+    	textFieldSurname.setText(MainController.getPersonAnniversary().getLastName());
+    	textFieldEmail.setText(MainController.getPersonAnniversary().getEmail());
+    	textFieldStreet.setText(MainController.getPersonAnniversary().getStreet());
+    	textFieldPostalCode.setText(MainController.getPersonAnniversary().getPostalCode());
+        textFieldCountry.setText(MainController.getPersonAnniversary().getCountry());
+        textFieldCity.setText(MainController.getPersonAnniversary().getCity());
+    	
+    	
+    	
+    	
+    }
+    
     @FXML
     void buttonCancel_onAction() {
         FXMLLoader loader = new FXMLLoader();
@@ -184,7 +207,7 @@ public class AddOrModifyPersonAnniversary implements Initializable {
 
     @FXML
     void buttonSetCurrentData_onAction() {
-
+    	fillComponentsByData();
     }
 
     private void initRadioButtons() {
