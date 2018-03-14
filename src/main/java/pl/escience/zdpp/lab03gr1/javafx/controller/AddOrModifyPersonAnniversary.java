@@ -122,7 +122,6 @@ public class AddOrModifyPersonAnniversary implements Initializable {
         String email = labelEmail.getText();
         String date = labelAnniversaryDate.getText();
         String relation = labelRelation.getText();
-
         String street = labelStreet.getText();
         String postalCode = labelPostalCode.getText();
         String city = labelCity.getText();
