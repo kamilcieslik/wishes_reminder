@@ -307,11 +307,13 @@ public class MainController implements Initializable {
                 .getSelectionModel().getSelectedItem();
         if (selectedExtendedPersonAnniversary != null) {
             clearModesComponents();
+            labelNewWishNameAndSurname.setText(selectedExtendedPersonAnniversary.getFirstName()
+                    + " " + selectedExtendedPersonAnniversary.getLastName());
             setHBoxVisible(hBoxModifyAnaDeleteSelectedPersonAnniversary, true);
             labelSelectedAlreadySentWishKind.setText(selectedExtendedPersonAnniversary.getAnniversaryKind());
             labelNewWishKind.setText(selectedExtendedPersonAnniversary.getAnniversaryKind());
             initCheckBoxes(selectedExtendedPersonAnniversary);
-            fillAlreadySentWishesTable();
+            fillAlreadySentWishesTable(selectedExtendedPersonAnniversary);
             fillDetailsModeComponents(selectedExtendedPersonAnniversary);
         }
     }
@@ -493,14 +495,12 @@ public class MainController implements Initializable {
         tableViewNewWishWishTemplates.setItems(wishTemplateObservableList);
     }
 
-    private void fillAlreadySentWishesTable() {
-        ViewExtendedPersonAnniversary selectedExtendedPersonAnniversary = tableViewPersonAnniversary.getSelectionModel()
-                .getSelectedItem();
-        sentWishObservableList.addAll(reminderService.getPersonAnniversary(selectedExtendedPersonAnniversary
+    private void fillAlreadySentWishesTable(ViewExtendedPersonAnniversary selectedItem) {
+        sentWishObservableList.addAll(reminderService.getPersonAnniversary(selectedItem
                 .getPersonAnniversaryId()).getSentWishes());
         tableViewAlreadySentWishes.setItems(sentWishObservableList);
-        labelAlreadySentWishesNameAndSurname.setText(selectedExtendedPersonAnniversary.getFirstName()
-                + " " + selectedExtendedPersonAnniversary.getLastName());
+        labelAlreadySentWishesNameAndSurname.setText(selectedItem.getFirstName()
+                + " " + selectedItem.getLastName());
     }
 
     private void fillDetailsModeComponents(ViewExtendedPersonAnniversary selectedItem) {
