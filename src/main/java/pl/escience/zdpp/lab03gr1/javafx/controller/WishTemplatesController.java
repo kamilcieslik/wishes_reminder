@@ -21,6 +21,7 @@ import pl.escience.zdpp.lab03gr1.database.service.ReminderService;
 import pl.escience.zdpp.lab03gr1.javafx.CustomMessageBox;
 import pl.escience.zdpp.lab03gr1.xml_parser.Parser;
 
+import javax.xml.bind.JAXBException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -119,10 +120,17 @@ public class WishTemplatesController implements Initializable {
                 .add(new FileChooser.ExtensionFilter("Szablony życzeń", "*.xml"));
         File file = frontCoversFileChooser.showOpenDialog(WishesReminder.getMainStage());
         if (file != null) {
-            xmlPath = file.toString();
-            Parser parser = new Parser();
-            WishTemplate wishTemplate = parser.readFromXMLFile(xmlPath);
-            textAreaNewWishText.setText(wishTemplate.getText());
+            try {
+                xmlPath = file.toString();
+                Parser parser = new Parser();
+                WishTemplate wishTemplate;
+                wishTemplate = parser.readFromXMLFile(xmlPath);
+                textAreaNewWishText.setText(wishTemplate.getText());
+            } catch (JAXBException e) {
+                customMessageBox.showMessageBox(Alert.AlertType.WARNING, "Ostrzeżenie",
+                        "Błąd odczytu szablonu życzenia z pliku.",
+                        "Powód: " + e.getMessage() + ".").showAndWait();
+            }
         }
     }
 
@@ -133,9 +141,15 @@ public class WishTemplatesController implements Initializable {
             chooser.setTitle("Wybór lokalizacji zapisu szablonu życzeń");
             File directory = chooser.showDialog(WishesReminder.getMainStage());
             if (directory != null) {
-                Parser parser = new Parser();
-                WishTemplate wishTemplate = tableViewWishTemplates.getSelectionModel().getSelectedItem();
-                parser.saveToXMLFile(wishTemplate, directory.toString());
+                try {
+                    Parser parser = new Parser();
+                    WishTemplate wishTemplate = tableViewWishTemplates.getSelectionModel().getSelectedItem();
+                    parser.saveToXMLFile(wishTemplate, directory.toString());
+                } catch (JAXBException e) {
+                    customMessageBox.showMessageBox(Alert.AlertType.WARNING, "Ostrzeżenie",
+                            "Błąd zapisu szablonu życzenia do pliku.",
+                            "Powód: " + e.getMessage() + ".").showAndWait();
+                }
             }
         } else {
             customMessageBox.showMessageBox(Alert.AlertType.WARNING, "Ostrzeżenie",
