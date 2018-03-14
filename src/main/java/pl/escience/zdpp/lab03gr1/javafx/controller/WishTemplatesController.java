@@ -49,7 +49,6 @@ public class WishTemplatesController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         loggedUser = WishesReminder.getLoggedUser();
         reminderService = WishesReminder.getReminderService();
-        System.out.println(loggedUser.getId());
         customMessageBox = new CustomMessageBox("image/icon.png");
         labelNumberOfWishTemplates.setText("------");
         textAreaNewWishText.setText("");
