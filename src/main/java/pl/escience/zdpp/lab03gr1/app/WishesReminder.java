@@ -43,10 +43,6 @@ public class WishesReminder extends Application {
         return reminderService;
     }
 
-    public static void setReminderService(ReminderService reminderService) {
-        WishesReminder.reminderService = reminderService;
-    }
-
     public static User getLoggedUser() {
         return loggedUser;
     }
@@ -59,12 +55,7 @@ public class WishesReminder extends Application {
         return relationObservableList;
     }
 
-    public static void setRelationObservableList(ObservableList<Relation> relationObservableList) {
-        WishesReminder.relationObservableList = relationObservableList;
-    }
-
     public void start(Stage primaryStage) {
-
         setupLog4J();
         initSessionFactory();
         reminderService = new ReminderService(sessionFactory);

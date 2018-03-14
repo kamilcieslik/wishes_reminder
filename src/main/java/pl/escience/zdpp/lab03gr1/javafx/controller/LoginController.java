@@ -94,13 +94,13 @@ public class LoginController implements Initializable {
     }
 
     @FXML
-    void passwordFieldPassword_onAction() {
+    void passwordFieldPassword_onKeyPressed() {
         if (!labelInvalidLoginOrPassword.getText().equals(""))
             labelInvalidLoginOrPassword.setText("");
     }
 
     @FXML
-    void textFieldLogin_onAction() {
+    void textFieldLogin_onKeyPressed() {
         if (!labelInvalidLoginOrPassword.getText().equals(""))
             labelInvalidLoginOrPassword.setText("");
     }

@@ -17,9 +17,11 @@ import javafx.stage.Stage;
 import pl.escience.zdpp.lab03gr1.app.WishesReminder;
 import pl.escience.zdpp.lab03gr1.database.entity.User;
 import pl.escience.zdpp.lab03gr1.database.entity.WishTemplate;
+import pl.escience.zdpp.lab03gr1.database.exception.UniqueViolationException;
 import pl.escience.zdpp.lab03gr1.database.service.ReminderService;
 import pl.escience.zdpp.lab03gr1.javafx.CustomMessageBox;
 import pl.escience.zdpp.lab03gr1.xml_parser.Parser;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -32,16 +34,14 @@ public class WishTemplatesController implements Initializable {
     private WishTemplate wishTemplate;
     private User loggedUser;
     private ReminderService reminderService;
-    private ObservableList<WishTemplate> wishTemplateObservableList= FXCollections.observableArrayList();
+    private ObservableList<WishTemplate> wishTemplateObservableList = FXCollections.observableArrayList();
 
     @FXML
-    private Label labelHeader, labelNumberOfWishTemplates;
+    private Label labelNumberOfWishTemplates;
     @FXML
     private TableView<WishTemplate> tableViewWishTemplates;
     @FXML
     private TableColumn<WishTemplate, String> tableColumnWishTemplatesText;
-    @FXML
-    private VBox vBoxNewWishMode;
     @FXML
     private TextArea textAreaSelectedWishTemplateText, textAreaNewWishText;
 
@@ -50,7 +50,6 @@ public class WishTemplatesController implements Initializable {
         loggedUser = WishesReminder.getLoggedUser();
         reminderService = WishesReminder.getReminderService();
         customMessageBox = new CustomMessageBox("image/icon.png");
-        labelNumberOfWishTemplates.setText("------");
         textAreaNewWishText.setText("");
         textAreaSelectedWishTemplateText.setText("");
         initTableView();
@@ -60,19 +59,18 @@ public class WishTemplatesController implements Initializable {
     }
 
     @FXML
-    void buttonAdd_onAction() {
-        if(!textAreaNewWishText.equals("")){
-            WishTemplate wishTemplate =new WishTemplate(textAreaNewWishText.getText());
-            wishTemplate.setUser(loggedUser);
-            reminderService.saveWishTemplate(wishTemplate);
+    void buttonAdd_onAction() throws UniqueViolationException {
+        if (!textAreaNewWishText.getText().equals("")) {
+            WishTemplate wishTemplate = new WishTemplate(textAreaNewWishText.getText());
+            loggedUser.addWishTemplate(wishTemplate);
+            reminderService.saveUser(loggedUser);
             wishTemplateObservableList.add(wishTemplate);
             textAreaNewWishText.clear();
             setLabelNumberOfWishTemplates();
-
-        }else {
+        } else {
             customMessageBox.showMessageBox(Alert.AlertType.WARNING, "Ostrzeżenie",
                     "Operacja dodania szablonu życzeń nie powiodłą się.",
-                    "Powód: Nie wypełniono pola tesktowego.").showAndWait();
+                    "Powód: nie uzupełniono treści życzenia.").showAndWait();
         }
 
     }
@@ -101,17 +99,17 @@ public class WishTemplatesController implements Initializable {
 
     @FXML
     void buttonDelete_onAction() {
-        if(tableViewWishTemplates.getSelectionModel().getSelectedItem()!=null){
-
-            WishTemplate wishTemplate =tableViewWishTemplates.getSelectionModel().getSelectedItem();
-            reminderService.deleteWishTemplate(wishTemplate.getId());
-            wishTemplateObservableList.remove(wishTemplate);
+        WishTemplate selectedWishTemplate = tableViewWishTemplates.getSelectionModel().getSelectedItem();
+        if (selectedWishTemplate != null) {
+            reminderService.deleteWishTemplate(selectedWishTemplate.getId());
+            loggedUser.getWishTemplates().remove(selectedWishTemplate);
+            wishTemplateObservableList.remove(selectedWishTemplate);
+            textAreaNewWishText.clear();
             setLabelNumberOfWishTemplates();
-
-        }else {
+        } else {
             customMessageBox.showMessageBox(Alert.AlertType.WARNING, "Ostrzeżenie",
                     "Operacja usuwania szablonu życzeń nie powiodłą się.",
-                    "Powód: Nie zaznaczono szablonu życzeń do usunięcia.").showAndWait();
+                    "Powód: nie zaznaczono szablonu życzeń.").showAndWait();
         }
     }
 
@@ -133,19 +131,18 @@ public class WishTemplatesController implements Initializable {
 
     @FXML
     void buttonWriteToFile_onAction() {
-        if (tableViewWishTemplates.getSelectionModel().getSelectedItem() != null){
+        if (tableViewWishTemplates.getSelectionModel().getSelectedItem() != null) {
             DirectoryChooser chooser = new DirectoryChooser();
             chooser.setTitle("Wybór lokalizacji zapisu szablonu życzeń");
             File directory = chooser.showDialog(WishesReminder.getMainStage());
             if (directory != null) {
                 Parser parser = new Parser();
                 WishTemplate wishTemplate = tableViewWishTemplates.getSelectionModel().getSelectedItem();
-                parser.saveToXMLFile(wishTemplate,directory.toString());
+                parser.saveToXMLFile(wishTemplate, directory.toString());
             }
-        }
-        else{
+        } else {
             customMessageBox.showMessageBox(Alert.AlertType.WARNING, "Ostrzeżenie",
-                    "Operacja zapisu nie powiodła się.",
+                    "Operacja zapisu do pliku nie powiodła się.",
                     "Powód: nie zaznaczono szablonu życzeń.").showAndWait();
         }
 
@@ -153,7 +150,7 @@ public class WishTemplatesController implements Initializable {
 
     @FXML
     void tableViewWishTemplates_onMouseClicked() {
-        if(tableViewWishTemplates.getSelectionModel().getSelectedItem() != null){
+        if (tableViewWishTemplates.getSelectionModel().getSelectedItem() != null) {
             textAreaSelectedWishTemplateText.setText(tableViewWishTemplates.getSelectionModel().getSelectedItem().getText());
         }
     }
@@ -161,7 +158,8 @@ public class WishTemplatesController implements Initializable {
     private void initTableView() {
         tableColumnWishTemplatesText.setCellValueFactory(new PropertyValueFactory<>("text"));
     }
-    private void setLabelNumberOfWishTemplates(){
+
+    private void setLabelNumberOfWishTemplates() {
         labelNumberOfWishTemplates.setText(String.valueOf(tableViewWishTemplates.getItems().size()));
     }
 }
