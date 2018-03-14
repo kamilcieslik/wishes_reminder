@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -481,7 +482,7 @@ public class MainController implements Initializable {
     private void fillEventsTable() {
         List<ViewExtendedPersonAnniversary> viewExtendedPersonAnniversaries
                 = reminderService.getViewExtendedContactsByUserId(loggedUser.getId());
-        viewExtendedPersonAnniversaries.forEach(ViewExtendedPersonAnniversary::calculateNextAnniversaryFields);
+        viewExtendedPersonAnniversaries.forEach(p -> p.calculateNextAnniversaryFields(Calendar.getInstance()));
         viewExtendedPersonAnniversaryObservableList.addAll(viewExtendedPersonAnniversaries);
         tableViewPersonAnniversary.setItems(viewExtendedPersonAnniversaryObservableList);
     }
