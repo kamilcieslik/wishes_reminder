@@ -14,11 +14,15 @@ import pl.escience.zdpp.lab03gr1.app.WishesReminder;
 import pl.escience.zdpp.lab03gr1.database.entity.PersonAnniversary;
 import pl.escience.zdpp.lab03gr1.database.entity.Relation;
 import pl.escience.zdpp.lab03gr1.database.entity.User;
+import pl.escience.zdpp.lab03gr1.database.service.ReminderService;
 import pl.escience.zdpp.lab03gr1.javafx.CustomMessageBox;
 import pl.escience.zdpp.lab03gr1.javafx.ListenerMethods;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +31,9 @@ public class AddOrModifyPersonAnniversary implements Initializable {
     private ObservableList<Relation> relationObservableList;
     private CustomMessageBox customMessageBox;
     private PersonAnniversary personanniversary;
+    private pl.escience.zdpp.lab03gr1.database.entity.Address address;
+    private ReminderService reminderService;
+
     @FXML
     private Label labelEnterPrimaryData, labelRelation, labelSurname, labelName, labelEmail, labelEnterAddress,
             labelStreet, labelPostalCode, labelCity, labelCountry, labelAnniversaryDate;
@@ -43,6 +50,8 @@ public class AddOrModifyPersonAnniversary implements Initializable {
     private HBox hBoxSetCurrentData;
     @FXML
     private DatePicker datePickerAnniversaryDate;
+
+
 
     public void initPersonAnniversaryData() {
     	//personanniversary = 
@@ -127,18 +136,36 @@ public class AddOrModifyPersonAnniversary implements Initializable {
         String email = labelEmail.getText();
         String date = labelAnniversaryDate.getText();
         String relation = labelRelation.getText();
+        Date datapicker = Date.from(datePickerAnniversaryDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        int day = datapicker.getDay();
+        int month = datapicker.getMonth();
+        int year =  datapicker.getYear();
+        Date dataa = Date.from(datePickerAnniversaryDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        Calendar calendar = Calendar.getInstance();
 
         String street = labelStreet.getText();
         String postalCode = labelPostalCode.getText();
         String city = labelCity.getText();
         String country = labelCountry.getText();
+        calendar.set(year, month, day);
 
         // String relation = comboBoxRelation.getSelectionModel().getSelectedItem();
         // TODO: Uwzględnić relation w konstrukcjach warunkowych.
         if (buttonAdd.getText().equals("Dodaj")) {
             if (date.isEmpty() && relation.isEmpty() && name.isEmpty() && surname.isEmpty() && email.isEmpty() &&
                     street.isEmpty() && postalCode.isEmpty() && city.isEmpty() && country.isEmpty()) {
-                // TODO: Utworzenie wydarzenia wraz z adresem. Przejście do głównej sceny - odświeżenie widoku wydarzeń.
+            	
+            	PersonAnniversary newPersonAnniversary = new PersonAnniversary(textFieldName.getText(),
+            	textFieldSurname.getText(),
+            	dataa,
+            	textFieldEmail.getText(),
+            	radioButtonRelationNameday.isSelected());
+            	reminderService.savePersonAnniversary(newPersonAnniversary);
+            	address.setPersonAnniversary(newPersonAnniversary);
+                //GetOutOfTheScene(true);
+
+            	// TODO: Utworzenie wydarzenia wraz z adresem. Przejście do głównej sceny - odświeżenie widoku wydarzeń.
             } else if (date.isEmpty() && relation.isEmpty() && name.isEmpty() && surname.isEmpty() && email.isEmpty()
                     && street.equals("Podaj ulicę i nr domu/mieszkania.") && postalCode.equals("Podaj kod pocztowy.")
                     && city.equals("Podaj miasto.") && country.equals("Podaj kraj.")) {
