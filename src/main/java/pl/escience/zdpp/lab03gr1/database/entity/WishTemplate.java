@@ -1,7 +1,5 @@
 package pl.escience.zdpp.lab03gr1.database.entity;
 
-import pl.escience.zdpp.lab03gr1.xml_parser.Parser;
-
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
