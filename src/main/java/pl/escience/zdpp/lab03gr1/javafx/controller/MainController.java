@@ -55,6 +55,7 @@ public class MainController implements Initializable {
             labelNewWishNameAndSurname;
     @FXML
     private TableView<ViewExtendedPersonAnniversary> tableViewPersonAnniversary;
+    private static TableView<ViewExtendedPersonAnniversary> tableViewPersonAnniversary1;
     @FXML
     private TableColumn<ViewExtendedPersonAnniversary, String> tableColumnPersonAnniversaryName,
             tableColumnPersonAnniversarySurname, tableColumnPersonAnniversaryRelation,
@@ -304,7 +305,9 @@ public class MainController implements Initializable {
     void tableViewPersonAnniversary_onMouseClicked() {
         ViewExtendedPersonAnniversary selectedExtendedPersonAnniversary = tableViewPersonAnniversary
                 .getSelectionModel().getSelectedItem();
+        tableViewPersonAnniversary1 = tableViewPersonAnniversary;
         if (selectedExtendedPersonAnniversary != null) {
+        	System.out.println(selectedExtendedPersonAnniversary);
             clearModesComponents();
             setHBoxVisible(hBoxModifyAnaDeleteSelectedPersonAnniversary, true);
             labelSelectedAlreadySentWishKind.setText(selectedExtendedPersonAnniversary.getAnniversaryKind());
@@ -313,6 +316,10 @@ public class MainController implements Initializable {
             fillAlreadySentWishesTable();
             fillDetailsModeComponents(selectedExtendedPersonAnniversary);
         }
+    }
+    public static ViewExtendedPersonAnniversary getPersonAnniversary() {
+    	return tableViewPersonAnniversary1
+                .getSelectionModel().getSelectedItem();
     }
 
     @FXML
