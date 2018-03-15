@@ -7,6 +7,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 @Entity
+/**
+ * <p>ViewExtendedPersonAnniversary class.</p>
+ *
+ * @author Patryk Zdral
+ * @version $Id: $Id
+ */
 @Immutable
 @Table(name = "view_extended_person_anniversary")
 public class ViewExtendedPersonAnniversary {
@@ -67,9 +73,31 @@ public class ViewExtendedPersonAnniversary {
     @Transient
     private Date nextAnniversaryDate;
 
+    /**
+     * <p>Constructor for ViewExtendedPersonAnniversary.</p>
+     */
     public ViewExtendedPersonAnniversary() {
     }
 
+    /**
+     * <p>Constructor for ViewExtendedPersonAnniversary.</p>
+     *
+     * @param userId a {@link java.lang.Integer} object.
+     * @param firstName a {@link java.lang.String} object.
+     * @param lastName a {@link java.lang.String} object.
+     * @param email a {@link java.lang.String} object.
+     * @param displayedAnniversaryDate a {@link java.util.Date} object.
+     * @param anniversaryDate a {@link java.util.Date} object.
+     * @param anniversaryKind a {@link java.lang.String} object.
+     * @param addressId a {@link java.lang.Integer} object.
+     * @param street a {@link java.lang.String} object.
+     * @param city a {@link java.lang.String} object.
+     * @param postalCode a {@link java.lang.String} object.
+     * @param country a {@link java.lang.String} object.
+     * @param relationId a {@link java.lang.Integer} object.
+     * @param relationName a {@link java.lang.String} object.
+     * @param numberOfSentWishes a {@link java.lang.Integer} object.
+     */
     public ViewExtendedPersonAnniversary(Integer userId, String firstName, String lastName, String email,
                                          Date displayedAnniversaryDate, Date anniversaryDate, String anniversaryKind,
                                          Integer addressId, String street, String city, String postalCode,
@@ -92,82 +120,182 @@ public class ViewExtendedPersonAnniversary {
         this.numberOfSentWishes = numberOfSentWishes;
     }
 
+    /**
+     * <p>Getter for the field <code>personAnniversaryId</code>.</p>
+     *
+     * @return a {@link java.lang.Integer} object.
+     */
     public Integer getPersonAnniversaryId() {
         return personAnniversaryId;
     }
 
+    /**
+     * <p>Getter for the field <code>userId</code>.</p>
+     *
+     * @return a {@link java.lang.Integer} object.
+     */
     public Integer getUserId() {
         return userId;
     }
 
+    /**
+     * <p>Getter for the field <code>firstName</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getFirstName() {
         return firstName;
     }
 
+    /**
+     * <p>Getter for the field <code>lastName</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getLastName() {
         return lastName;
     }
 
+    /**
+     * <p>Getter for the field <code>email</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * <p>Getter for the field <code>displayedAnniversaryDate</code>.</p>
+     *
+     * @return a {@link java.util.Date} object.
+     */
     public Date getDisplayedAnniversaryDate() {
         return displayedAnniversaryDate;
     }
 
+    /**
+     * <p>Setter for the field <code>anniversaryDate</code>.</p>
+     *
+     * @param anniversaryDate a {@link java.util.Date} object.
+     */
     public void setAnniversaryDate(Date anniversaryDate) {
         this.anniversaryDate = anniversaryDate;
     }
 
+    /**
+     * <p>Getter for the field <code>anniversaryDate</code>.</p>
+     *
+     * @return a {@link java.util.Date} object.
+     */
     public Date getAnniversaryDate() {
         return anniversaryDate;
     }
 
+    /**
+     * <p>Getter for the field <code>anniversaryKind</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getAnniversaryKind() {
         return anniversaryKind;
     }
 
+    /**
+     * <p>Getter for the field <code>addressId</code>.</p>
+     *
+     * @return a {@link java.lang.Integer} object.
+     */
     public Integer getAddressId() {
         return addressId;
     }
 
+    /**
+     * <p>Getter for the field <code>street</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getStreet() {
         return street;
     }
 
+    /**
+     * <p>Getter for the field <code>city</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getCity() {
         return city;
     }
 
+    /**
+     * <p>Getter for the field <code>postalCode</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getPostalCode() {
         return postalCode;
     }
 
+    /**
+     * <p>Getter for the field <code>country</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getCountry() {
         return country;
     }
 
+    /**
+     * <p>Getter for the field <code>relationId</code>.</p>
+     *
+     * @return a {@link java.lang.Integer} object.
+     */
     public Integer getRelationId() {
         return relationId;
     }
 
+    /**
+     * <p>Getter for the field <code>relationName</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getRelationName() {
         return relationName;
     }
 
+    /**
+     * <p>Getter for the field <code>numberOfSentWishes</code>.</p>
+     *
+     * @return a {@link java.lang.Integer} object.
+     */
     public Integer getNumberOfSentWishes() {
         return numberOfSentWishes;
     }
 
+    /**
+     * <p>Getter for the field <code>numberOfDaysToNextAnniversary</code>.</p>
+     *
+     * @return a {@link java.lang.Integer} object.
+     */
     public Integer getNumberOfDaysToNextAnniversary() {
         return numberOfDaysToNextAnniversary;
     }
 
+    /**
+     * <p>Getter for the field <code>nextAnniversaryDate</code>.</p>
+     *
+     * @return a {@link java.util.Date} object.
+     */
     public Date getNextAnniversaryDate() {
         return nextAnniversaryDate;
     }
 
+    /**
+     * <p>calculateNextAnniversaryFields.</p>
+     *
+     * @param systemTime a {@link java.util.Calendar} object.
+     */
     public void calculateNextAnniversaryFields(Calendar systemTime) {
         Calendar anniversaryDate = Calendar.getInstance();
         anniversaryDate.setTime(this.anniversaryDate);
@@ -195,6 +323,7 @@ public class ViewExtendedPersonAnniversary {
     }
 
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "ViewExtendedPersonAnniversary{" +
