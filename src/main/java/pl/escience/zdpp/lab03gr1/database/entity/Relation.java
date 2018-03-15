@@ -21,6 +21,10 @@ public class Relation {
     public Relation() {
     }
 
+    public Relation(String ralationName) {
+        this.ralationName = ralationName;
+    }
+
     public Integer getId() {
         return id;
     }

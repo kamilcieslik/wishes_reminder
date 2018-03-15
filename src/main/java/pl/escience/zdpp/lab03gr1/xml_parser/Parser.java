@@ -9,29 +9,19 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 
 public class Parser {
-    public WishTemplate readFromXMLFile(String path) {
+    public WishTemplate readFromXMLFile(String path) throws JAXBException {
         File file = new File(path);
-        try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(WishTemplate.class);
-            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            return (WishTemplate) jaxbUnmarshaller.unmarshal(file);
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
-        return null;
+        JAXBContext jaxbContext = JAXBContext.newInstance(WishTemplate.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        return (WishTemplate) jaxbUnmarshaller.unmarshal(file);
     }
 
-    public void saveToXMLFile(WishTemplate wishTemplate,String directory) {
+    public void saveToXMLFile(WishTemplate wishTemplate, String directory) throws JAXBException {
         JAXBContext jaxbContext;
-        try {
-
-            jaxbContext = JAXBContext.newInstance(WishTemplate.class);
-            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            jaxbMarshaller.marshal(wishTemplate, new File(directory,"wish_template_" + wishTemplate.getText()
-                    .substring(0, Math.min(wishTemplate.getText().length(), 10)) + ".xml"));
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
+        jaxbContext = JAXBContext.newInstance(WishTemplate.class);
+        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        jaxbMarshaller.marshal(wishTemplate, new File(directory, "wish_template_" + wishTemplate.getText()
+                .substring(0, Math.min(wishTemplate.getText().length(), 10)) + ".xml"));
     }
 }

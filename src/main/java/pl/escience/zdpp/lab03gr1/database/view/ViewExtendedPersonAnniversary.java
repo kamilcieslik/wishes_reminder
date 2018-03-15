@@ -116,6 +116,10 @@ public class ViewExtendedPersonAnniversary {
         return displayedAnniversaryDate;
     }
 
+    public void setAnniversaryDate(Date anniversaryDate) {
+        this.anniversaryDate = anniversaryDate;
+    }
+
     public Date getAnniversaryDate() {
         return anniversaryDate;
     }
@@ -164,17 +168,16 @@ public class ViewExtendedPersonAnniversary {
         return nextAnniversaryDate;
     }
 
-    public void calculateNextAnniversaryFields() {
+    public void calculateNextAnniversaryFields(Calendar systemTime) {
         Calendar anniversaryDate = Calendar.getInstance();
         anniversaryDate.setTime(this.anniversaryDate);
 
         int anniversaryDateMonth = anniversaryDate.get(Calendar.MONTH) + 1;
         int anniversaryDateDay = anniversaryDate.get(Calendar.DAY_OF_MONTH);
 
-        Calendar dateNow = Calendar.getInstance();
-        int dateNowYear = dateNow.get(Calendar.YEAR);
-        int dateNowMonth = dateNow.get(Calendar.MONTH) + 1;
-        int dateNowDay = dateNow.get(Calendar.DAY_OF_MONTH);
+        int dateNowYear = systemTime.get(Calendar.YEAR);
+        int dateNowMonth = systemTime.get(Calendar.MONTH) + 1;
+        int dateNowDay = systemTime.get(Calendar.DAY_OF_MONTH);
 
         Calendar nextAnniversaryDate = Calendar.getInstance();
         nextAnniversaryDate.set(Calendar.DAY_OF_MONTH, anniversaryDateDay);
@@ -187,7 +190,7 @@ public class ViewExtendedPersonAnniversary {
             nextAnniversaryDate.set(Calendar.YEAR, dateNowYear + 1);
         this.nextAnniversaryDate = nextAnniversaryDate.getTime();
 
-        long numberOfDaysToNextAnniversary = nextAnniversaryDate.getTime().getTime() - dateNow.getTime().getTime();
+        long numberOfDaysToNextAnniversary = nextAnniversaryDate.getTime().getTime() - systemTime.getTime().getTime();
         this.numberOfDaysToNextAnniversary = Math.toIntExact(numberOfDaysToNextAnniversary / 1000 / 60 / 60 / 24);
     }
 
