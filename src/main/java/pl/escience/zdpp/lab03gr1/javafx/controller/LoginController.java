@@ -21,6 +21,12 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * <p>LoginController class.</p>
+ *
+ * @author Patryk Zdral
+ * @version $Id: $Id
+ */
 public class LoginController implements Initializable {
     private ReminderService reminderService;
 
@@ -31,6 +37,7 @@ public class LoginController implements Initializable {
     @FXML
     private Label labelInvalidLoginOrPassword;
 
+    /** {@inheritDoc} */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         reminderService = WishesReminder.getReminderService();
