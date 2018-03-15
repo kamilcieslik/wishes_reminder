@@ -8,13 +8,29 @@ import pl.escience.zdpp.lab03gr1.database.entity.Relation;
 
 import java.util.List;
 
+/**
+ * <p>RelationDAO class.</p>
+ *
+ * @author Patryk Zdral
+ * @version $Id: $Id
+ */
 public class RelationDAO implements EntityCRUD<Relation> {
     private final SessionFactory sessionFactory;
 
+    /**
+     * <p>Constructor for RelationDAO.</p>
+     *
+     * @param sessionFactory a {@link org.hibernate.SessionFactory} object.
+     */
     public RelationDAO(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
+    /**
+     * <p>getEntities.</p>
+     *
+     * @return a {@link java.util.List} object.
+     */
     public List<Relation> getEntities() {
         List<Relation> relations;
         Session currentSession = sessionFactory.getCurrentSession();
@@ -26,6 +42,11 @@ public class RelationDAO implements EntityCRUD<Relation> {
         return relations;
     }
 
+    /**
+     * <p>saveEntity.</p>
+     *
+     * @param entity a {@link pl.escience.zdpp.lab03gr1.database.entity.Relation} object.
+     */
     public void saveEntity(Relation entity) {
         Session currentSession = sessionFactory.getCurrentSession();
         currentSession.beginTransaction();
@@ -34,6 +55,7 @@ public class RelationDAO implements EntityCRUD<Relation> {
 
     }
 
+    /** {@inheritDoc} */
     public Relation getEntity(int id) {
         Relation relation;
         Session currentSession = sessionFactory.getCurrentSession();
@@ -44,6 +66,7 @@ public class RelationDAO implements EntityCRUD<Relation> {
         return relation;
     }
 
+    /** {@inheritDoc} */
     public void deleteEntity(int id) {
         Session currentSession = sessionFactory.getCurrentSession();
         currentSession.beginTransaction();

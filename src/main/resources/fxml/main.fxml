@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.escience.zdpp.lab03gr1.javafx.controller.MainController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/8.0.162" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.escience.zdpp.lab03gr1.javafx.controller.MainController">
     <MenuBar>
         <Menu mnemonicParsing="false" text="Edycja">
             <MenuItem mnemonicParsing="false" onAction="#menuItemModifyUserProfile_onAction" text="Profil użytkownika" />

@@ -11,6 +11,7 @@ import java.io.File;
 
 import static org.junit.Assert.assertEquals;
 
+
 public class RelationDAOTest {
     private SessionFactory factory;
     private ReminderService reminderService;

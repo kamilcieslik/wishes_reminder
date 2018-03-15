@@ -37,6 +37,12 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * <p>MainController class.</p>
+ *
+ * @author Patryk Zdral
+ * @version $Id: $Id
+ */
 public class MainController implements Initializable {
     private ReminderService reminderService;
     private User loggedUser;
@@ -88,6 +94,7 @@ public class MainController implements Initializable {
     @FXML
     private TextField textFieldNewWishEmailSubject;
 
+    /** {@inheritDoc} */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         reminderService = WishesReminder.getReminderService();
