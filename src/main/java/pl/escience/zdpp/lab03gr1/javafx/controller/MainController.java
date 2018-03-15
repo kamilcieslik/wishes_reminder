@@ -37,6 +37,12 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * <p>MainController class.</p>
+ *
+ * @author Patryk Zdral
+ * @version $Id: $Id
+ */
 public class MainController implements Initializable {
     private ReminderService reminderService;
     private User loggedUser;
@@ -56,7 +62,6 @@ public class MainController implements Initializable {
             labelNewWishNameAndSurname;
     @FXML
     private TableView<ViewExtendedPersonAnniversary> tableViewPersonAnniversary;
-    private static TableView<ViewExtendedPersonAnniversary> tableViewPersonAnniversary1;
     @FXML
     private TableColumn<ViewExtendedPersonAnniversary, String> tableColumnPersonAnniversaryName,
             tableColumnPersonAnniversarySurname, tableColumnPersonAnniversaryRelation,
@@ -88,6 +93,9 @@ public class MainController implements Initializable {
     @FXML
     private TextField textFieldNewWishEmailSubject;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         reminderService = WishesReminder.getReminderService();
@@ -137,6 +145,7 @@ public class MainController implements Initializable {
                             .getPersonAnniversary(selectedExtendedPersonAnniversary.getPersonAnniversaryId()));
                     reminderService.saveSentWish(newWish);
                     sentWishObservableList.add(newWish);
+                    labelDetailsNumberOfSentWiches.setText(String.valueOf(selectedExtendedPersonAnniversary.incrementNumberOfSentWishes()));
                     checkBoxNewWishSentByEmail.setSelected(false);
                     checkBoxNewWishSentByList.setSelected(false);
                     textFieldNewWishEmailSubject.setText("");
@@ -194,7 +203,9 @@ public class MainController implements Initializable {
             loader.setLocation(getClass().getClassLoader().getResource("fxml/add_or_modify_person_anniversary.fxml"));
             loader.load();
             AddOrModifyPersonAnniversary controller = loader.getController();
-            controller.initPersonAnniversaryData();
+            controller.initPersonAnniversaryData(reminderService
+                    .getPersonAnniversary(tableViewPersonAnniversary.getSelectionModel().getSelectedItem()
+                            .getPersonAnniversaryId()));
             Parent parent = loader.getRoot();
             Stage primaryStage = new Stage();
             WishesReminder.setMainStage(primaryStage);
@@ -306,23 +317,15 @@ public class MainController implements Initializable {
     void tableViewPersonAnniversary_onMouseClicked() {
         ViewExtendedPersonAnniversary selectedExtendedPersonAnniversary = tableViewPersonAnniversary
                 .getSelectionModel().getSelectedItem();
-        tableViewPersonAnniversary1 = tableViewPersonAnniversary;
         if (selectedExtendedPersonAnniversary != null) {
-        	System.out.println(selectedExtendedPersonAnniversary);
             clearModesComponents();
-            labelNewWishNameAndSurname.setText(selectedExtendedPersonAnniversary.getFirstName()
-                    + " " + selectedExtendedPersonAnniversary.getLastName());
             setHBoxVisible(hBoxModifyAnaDeleteSelectedPersonAnniversary, true);
             labelSelectedAlreadySentWishKind.setText(selectedExtendedPersonAnniversary.getAnniversaryKind());
             labelNewWishKind.setText(selectedExtendedPersonAnniversary.getAnniversaryKind());
             initCheckBoxes(selectedExtendedPersonAnniversary);
-            fillAlreadySentWishesTable(selectedExtendedPersonAnniversary);
+            fillAlreadySentWishesTable();
             fillDetailsModeComponents(selectedExtendedPersonAnniversary);
         }
-    }
-    public static ViewExtendedPersonAnniversary getPersonAnniversary() {
-    	return tableViewPersonAnniversary1
-                .getSelectionModel().getSelectedItem();
     }
 
     @FXML
@@ -502,12 +505,14 @@ public class MainController implements Initializable {
         tableViewNewWishWishTemplates.setItems(wishTemplateObservableList);
     }
 
-    private void fillAlreadySentWishesTable(ViewExtendedPersonAnniversary selectedItem) {
-        sentWishObservableList.addAll(reminderService.getPersonAnniversary(selectedItem
+    private void fillAlreadySentWishesTable() {
+        ViewExtendedPersonAnniversary selectedExtendedPersonAnniversary = tableViewPersonAnniversary.getSelectionModel()
+                .getSelectedItem();
+        sentWishObservableList.addAll(reminderService.getPersonAnniversary(selectedExtendedPersonAnniversary
                 .getPersonAnniversaryId()).getSentWishes());
         tableViewAlreadySentWishes.setItems(sentWishObservableList);
-        labelAlreadySentWishesNameAndSurname.setText(selectedItem.getFirstName()
-                + " " + selectedItem.getLastName());
+        labelAlreadySentWishesNameAndSurname.setText(selectedExtendedPersonAnniversary.getFirstName()
+                + " " + selectedExtendedPersonAnniversary.getLastName());
     }
 
     private void fillDetailsModeComponents(ViewExtendedPersonAnniversary selectedItem) {

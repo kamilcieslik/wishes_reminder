@@ -6,13 +6,33 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+/**
+ * <p>CustomMessageBox class.</p>
+ *
+ * @author Patryk Zdral
+ * @version $Id: $Id
+ */
 public class CustomMessageBox {
     private String iconImagePath;
 
+    /**
+     * <p>Constructor for CustomMessageBox.</p>
+     *
+     * @param iconImagePath a {@link java.lang.String} object.
+     */
     public CustomMessageBox(String iconImagePath) {
         this.iconImagePath = iconImagePath;
     }
 
+    /**
+     * <p>showMessageBox.</p>
+     *
+     * @param alertType a javafx.scene.control.Alert$AlertType object.
+     * @param title a {@link java.lang.String} object.
+     * @param header a {@link java.lang.String} object.
+     * @param content a {@link java.lang.String} object.
+     * @return a javafx.scene.control.Alert object.
+     */
     public Alert showMessageBox(Alert.AlertType alertType, String title, String header, String content) {
         Alert alert = new Alert(alertType);
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -23,6 +43,17 @@ public class CustomMessageBox {
         return alert;
     }
 
+    /**
+     * <p>showConfirmMessageBox.</p>
+     *
+     * @param alertType a javafx.scene.control.Alert$AlertType object.
+     * @param title a {@link java.lang.String} object.
+     * @param header a {@link java.lang.String} object.
+     * @param content a {@link java.lang.String} object.
+     * @param confirmText a {@link java.lang.String} object.
+     * @param cancelText a {@link java.lang.String} object.
+     * @return a javafx.scene.control.Alert object.
+     */
     public Alert showConfirmMessageBox(Alert.AlertType alertType, String title, String header, String content,
                                        String confirmText, String cancelText) {
         ButtonType confirmButton = new ButtonType(confirmText, ButtonBar.ButtonData.OK_DONE);

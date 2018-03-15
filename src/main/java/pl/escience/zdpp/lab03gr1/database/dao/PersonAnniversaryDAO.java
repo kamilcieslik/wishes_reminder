@@ -8,13 +8,29 @@ import pl.escience.zdpp.lab03gr1.database.entity.PersonAnniversary;
 
 import java.util.List;
 
+/**
+ * <p>PersonAnniversaryDAO class.</p>
+ *
+ * @author Patryk Zdral
+ * @version $Id: $Id
+ */
 public class PersonAnniversaryDAO implements EntityCRUD<PersonAnniversary> {
     private final SessionFactory sessionFactory;
 
+    /**
+     * <p>Constructor for PersonAnniversaryDAO.</p>
+     *
+     * @param sessionFactory a {@link org.hibernate.SessionFactory} object.
+     */
     public PersonAnniversaryDAO(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
+    /**
+     * <p>getEntities.</p>
+     *
+     * @return a {@link java.util.List} object.
+     */
     public List<PersonAnniversary> getEntities() {
         List<PersonAnniversary> personAnniversaries;
         Session currentSession = sessionFactory.getCurrentSession();
@@ -26,6 +42,11 @@ public class PersonAnniversaryDAO implements EntityCRUD<PersonAnniversary> {
         return personAnniversaries;
     }
 
+    /**
+     * <p>saveEntity.</p>
+     *
+     * @param entity a {@link pl.escience.zdpp.lab03gr1.database.entity.PersonAnniversary} object.
+     */
     public void saveEntity(PersonAnniversary entity) {
         Session currentSession = sessionFactory.getCurrentSession();
         currentSession.beginTransaction();
@@ -33,6 +54,7 @@ public class PersonAnniversaryDAO implements EntityCRUD<PersonAnniversary> {
         currentSession.getTransaction().commit();
     }
 
+    /** {@inheritDoc} */
     public PersonAnniversary getEntity(int id) {
         PersonAnniversary personAnniversary;
         Session currentSession = sessionFactory.getCurrentSession();
@@ -43,6 +65,7 @@ public class PersonAnniversaryDAO implements EntityCRUD<PersonAnniversary> {
         return personAnniversary;
     }
 
+    /** {@inheritDoc} */
     public void deleteEntity(int id) {
         Session currentSession = sessionFactory.getCurrentSession();
         currentSession.beginTransaction();
