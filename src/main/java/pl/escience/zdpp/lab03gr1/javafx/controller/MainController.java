@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -309,11 +310,13 @@ public class MainController implements Initializable {
         if (selectedExtendedPersonAnniversary != null) {
         	System.out.println(selectedExtendedPersonAnniversary);
             clearModesComponents();
+            labelNewWishNameAndSurname.setText(selectedExtendedPersonAnniversary.getFirstName()
+                    + " " + selectedExtendedPersonAnniversary.getLastName());
             setHBoxVisible(hBoxModifyAnaDeleteSelectedPersonAnniversary, true);
             labelSelectedAlreadySentWishKind.setText(selectedExtendedPersonAnniversary.getAnniversaryKind());
             labelNewWishKind.setText(selectedExtendedPersonAnniversary.getAnniversaryKind());
             initCheckBoxes(selectedExtendedPersonAnniversary);
-            fillAlreadySentWishesTable();
+            fillAlreadySentWishesTable(selectedExtendedPersonAnniversary);
             fillDetailsModeComponents(selectedExtendedPersonAnniversary);
         }
     }
@@ -488,7 +491,7 @@ public class MainController implements Initializable {
     private void fillEventsTable() {
         List<ViewExtendedPersonAnniversary> viewExtendedPersonAnniversaries
                 = reminderService.getViewExtendedContactsByUserId(loggedUser.getId());
-        viewExtendedPersonAnniversaries.forEach(ViewExtendedPersonAnniversary::calculateNextAnniversaryFields);
+        viewExtendedPersonAnniversaries.forEach(p -> p.calculateNextAnniversaryFields(Calendar.getInstance()));
         viewExtendedPersonAnniversaryObservableList.addAll(viewExtendedPersonAnniversaries);
         tableViewPersonAnniversary.setItems(viewExtendedPersonAnniversaryObservableList);
     }
@@ -499,14 +502,12 @@ public class MainController implements Initializable {
         tableViewNewWishWishTemplates.setItems(wishTemplateObservableList);
     }
 
-    private void fillAlreadySentWishesTable() {
-        ViewExtendedPersonAnniversary selectedExtendedPersonAnniversary = tableViewPersonAnniversary.getSelectionModel()
-                .getSelectedItem();
-        sentWishObservableList.addAll(reminderService.getPersonAnniversary(selectedExtendedPersonAnniversary
+    private void fillAlreadySentWishesTable(ViewExtendedPersonAnniversary selectedItem) {
+        sentWishObservableList.addAll(reminderService.getPersonAnniversary(selectedItem
                 .getPersonAnniversaryId()).getSentWishes());
         tableViewAlreadySentWishes.setItems(sentWishObservableList);
-        labelAlreadySentWishesNameAndSurname.setText(selectedExtendedPersonAnniversary.getFirstName()
-                + " " + selectedExtendedPersonAnniversary.getLastName());
+        labelAlreadySentWishesNameAndSurname.setText(selectedItem.getFirstName()
+                + " " + selectedItem.getLastName());
     }
 
     private void fillDetailsModeComponents(ViewExtendedPersonAnniversary selectedItem) {
