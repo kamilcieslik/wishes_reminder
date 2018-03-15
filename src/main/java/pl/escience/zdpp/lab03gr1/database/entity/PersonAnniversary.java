@@ -144,7 +144,7 @@ public class PersonAnniversary {
         this.sentWishes = sentWishes;
     }
 
-    public void addSentWish(SentWish sentWish){
+    public void addSentWish(SentWish sentWish) {
         if (sentWishes == null)
             sentWishes = new ArrayList<>();
 
@@ -154,14 +154,9 @@ public class PersonAnniversary {
 
     @Override
     public String toString() {
-        return "PersonAnniversary{" +
-                "id=" + id + "," +
-                " firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", anniversaryDate=" + anniversaryDate +
-                ", email='" + email + '\'' +
-                ", birthday=" + birthday +
-                '}';
+        if (sentWishes != null)
+            return String.valueOf(sentWishes.size());
+        else return "0";
     }
 
 }

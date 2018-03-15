@@ -1,5 +1,8 @@
 package pl.escience.zdpp.lab03gr1.database.entity;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

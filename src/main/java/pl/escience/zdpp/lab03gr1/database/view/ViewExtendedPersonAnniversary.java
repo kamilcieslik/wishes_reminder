@@ -291,6 +291,13 @@ public class ViewExtendedPersonAnniversary {
         return nextAnniversaryDate;
     }
 
+    public Integer incrementNumberOfSentWishes(){
+        if (numberOfSentWishes==null)
+            numberOfSentWishes = 1;
+        else numberOfSentWishes++;
+        return numberOfSentWishes;
+    }
+
     /**
      * <p>calculateNextAnniversaryFields.</p>
      *
