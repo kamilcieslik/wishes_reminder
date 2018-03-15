@@ -192,12 +192,11 @@ public class MainController implements Initializable {
 
     @FXML
     void buttonDeletePersonAnniversary_onAction() {
-        // TODO:
+
     }
 
     @FXML
     void buttonModifyPersonAnniversary_onAction() {
-        // TODO:
         FXMLLoader loader = new FXMLLoader();
         try {
             loader.setLocation(getClass().getClassLoader().getResource("fxml/add_or_modify_person_anniversary.fxml"));
